@@ -3,7 +3,7 @@
     <AppNavbar />
 
     <main class="p-6">
-      <route-view />
+      <router-view />
     </main>
   </div>
 </template>

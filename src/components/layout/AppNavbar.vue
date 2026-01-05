@@ -1,7 +1,6 @@
 <template>
   <header class="border-b bg-card">
     <div class="flex h-14 items-center justify-between px-6">
-      
       <!-- Esquerda: Nome do módulo -->
       <div class="flex items-center gap-4">
         <h1 class="text-lg font-semibold">
@@ -11,25 +10,16 @@
 
       <!-- Direita: ações -->
       <div class="flex items-center gap-3">
-
         <!-- Menu de módulos -->
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
-            <Button variant="outline" size="sm">
-              Módulos
-            </Button>
+            <Button variant="outline" size="sm"> Módulos </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              Marketplace
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Relatórios
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Automação
-            </DropdownMenuItem>
+            <DropdownMenuItem> Marketplace </DropdownMenuItem>
+            <DropdownMenuItem> Relatórios </DropdownMenuItem>
+            <DropdownMenuItem> Automação </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -50,18 +40,13 @@
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              Configurações pessoais
-            </DropdownMenuItem>
+            <DropdownMenuItem> Configurações pessoais </DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem class="text-red-500" @click="logout">
-              Sair
-            </DropdownMenuItem>
+            <DropdownMenuItem class="text-red-500" @click="logout"> Sair </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
       </div>
     </div>
   </header>
@@ -75,13 +60,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { useAuthStore } from '@/stores/auth'
 const { logout } = useAuthStore()
 
 const { user } = storeToRefs(useAuthStore())
-
 
 import { useTheme } from '@/composables/useTheme'
 import { storeToRefs } from 'pinia'
@@ -89,5 +73,4 @@ import { storeToRefs } from 'pinia'
 const { theme, toggleTheme } = useTheme()
 
 const currentModule = 'Marketplace'
-
 </script>

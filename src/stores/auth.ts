@@ -2,19 +2,9 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
 import router from '@/router'
-import { toast } from 'vue-sonner'
-//import { toast } from '@/lib/toast'
 
-export interface User {
-  id: number
-  name: string
-  email: string
-}
-
-interface LoginCredentials {
-  email: string
-  password: string
-}
+import type { User, LoginCredentials, Modules } from '@/types/auth'
+import { handleError, showErrorToast } from '@/utils/helpers'
 
 export const useAuthStore = defineStore('auth', () => {
   /* ===============================
@@ -26,15 +16,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!user.value)
 
-
-  /* ===============================
-   * HELPERS
-   * =============================== */
-  const showErrorToast = (title: string, description?: string) => {
-    toast.error(title, {
-      description,
-    })
-  }
+  const getModules = computed(() => {
+    return user.value?.modules
+  })
 
   /* ===============================
    * ACTIONS
@@ -66,35 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
       router.push('/app')
     } catch (error: any) {
-      const status = error?.response?.status
-      const response = error?.response?.data
-
-      // 422 - Credenciais inválidas / validação
-      if (status === 422) {
-        const message =
-          response?.errors?.email?.[0] ??
-          response?.message ??
-          'Credenciais inválidas'
-
-        showErrorToast('Falha no login', message)
-      }
-
-      // 500 - Erro inesperado
-      else if (status >= 500) {
-        showErrorToast(
-          'Erro interno',
-          'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-        )
-      }
-
-      // fallback
-      else {
-        showErrorToast(
-          'Erro',
-          'Não foi possível realizar o login.'
-        )
-      }
-
+      handleError(error?.response)
       throw error
     } finally {
       loading.value = false
@@ -116,7 +72,7 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = null
 
       localStorage.removeItem('auth_token')
-     
+
       loading.value = false
       router.push('/')
     }
@@ -178,43 +134,14 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       router.push('/app')
-    } catch (error) {
-      const status = error?.response?.status
-      const response = error?.response?.data
-
-      // 422 - Credenciais inválidas / validação
-      if (status === 422) {
-        const message =
-          response?.errors?.email?.[0] ??
-          response?.message ??
-          'Credenciais inválidas'
-
-        showErrorToast('Falha no login', message)
-      }
-
-      // 500 - Erro inesperado
-      else if (status >= 500) {
-        showErrorToast(
-          'Erro interno',
-          'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-        )
-      }
-
-      // fallback
-      else {
-        showErrorToast(
-          'Erro',
-          'Não foi possível realizar o login.'
-        )
-      }
+    } catch (error: any) {
+      handleError(error?.response)
 
       throw error
     } finally {
       loading.value = false
     }
   }
-
-
 
   return {
     // state
@@ -224,11 +151,11 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
 
     // actions
-    getCsrfCookie,
     login,
     logout,
     fetchUser,
     initAuth,
-    register
+    register,
+    getModules,
   }
 })

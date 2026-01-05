@@ -46,6 +46,9 @@ export { Skeleton } from './skeleton'
 //export { Input } from './input'
 export { default as Input } from '@/components/common/AppInput.vue'
 export { default as Label } from '@/components/common/AppLabel.vue'
+export { default as Table } from '@/components/common/AppTable.vue'
+export { default as Dialog } from '@/components/common/AppDialog.vue'
+export { default as MasketInput } from '@/components/common/AppMaskedInput.vue'
 
 export {
   Select,
@@ -63,15 +66,15 @@ export { Switch } from './switch'
 // ==========================
 // Dialogs
 // ==========================
-export {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from './dialog'
+// export {
+//   Dialog,
+//   DialogTrigger,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogDescription,
+//   DialogFooter,
+// } from './dialog'
 
 export {
   AlertDialog,

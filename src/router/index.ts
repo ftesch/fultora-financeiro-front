@@ -4,15 +4,16 @@ import { useAuthStore } from '@/stores/auth'
 
 //const authStore = useAuthStore()
 
-
 // Pages
 import Login from '@/pages/auth/Login.vue'
 import Marketplace from '@/pages/marketplace/Index.vue'
+import App from '@/pages/app/Index.vue'
 
 // Layout
 import AppLayout from '@/components/layout/AppLayout.vue'
 import GuestLayout from '@/components/layout/GuestLayout.vue'
 import Register from '@/pages/auth/Register.vue'
+import MarketplacePurchase from '@/pages/marketplace/MarketplacePurchase.vue'
 
 // ⚠️ temporário (depois vira Pinia)
 // const isAuthenticated = () => {
@@ -24,20 +25,20 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: GuestLayout,
     meta: {
-      guest: true,
+      requiresAuth: false,
     },
-      children: [
-        {
-          path: '',
-          name: 'login',
-          component: Login,
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: Register,
-        }
-    ]
+    children: [
+      {
+        path: '',
+        name: 'login',
+        component: Login,
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: Register,
+      },
+    ],
   },
 
   {
@@ -49,12 +50,18 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        redirect: { name: 'marketplace' },
+        name: 'app',
+        component: App,
       },
       {
         path: 'marketplace',
         name: 'marketplace',
         component: Marketplace,
+      },
+      {
+        path: 'MarketplacePurchase/:id',
+        name: 'MarketplacePurchase',
+        component: MarketplacePurchase,
       },
     ],
   },
@@ -75,20 +82,14 @@ const router = createRouter({
  * Global Guard
  */
 router.beforeEach((to) => {
-
-  const authStore = useAuthStore() // ✅ aqui é seguro
-
-  console.log("global Auth", authStore.user)
+  const authStore = useAuthStore()
 
   // rota protegida sem login
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return { name: 'login' }
   }
 
-  // rota de guest mas usuário já logado
-  if (to.meta.guest && authStore.isAuthenticated) {
-    return { name: 'marketplace' }
-  }
+  return true
 })
 
 export default router

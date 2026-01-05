@@ -8,26 +8,28 @@
       {{ product.description }}
     </p>
 
-    <div class="mt-4 flex items-center justify-between">
-      <span class="font-medium">
-        {{ product.price }}
-      </span>
-
-      <Button size="sm">
-        Comprar
-      </Button>
+    <div class="mt-4 flex justify-end">
+      <Button size="sm" @click="buy"> Comprar </Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui'
+import router from '@/router'
+import { useMarketplaceStore } from '@/stores/marketplace'
+const { setPurchaseProduct } = useMarketplaceStore()
 
-defineProps<{
+const props = defineProps<{
   product: {
+    id: string
     name: string
     description: string
-    price: string
   }
 }>()
+
+const buy = () => {
+  setPurchaseProduct(props.product.id)
+  router.push({ name: 'MarketplacePurchase', params: { id: props.product.id } })
+}
 </script>
