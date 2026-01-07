@@ -1,13 +1,39 @@
-<script setup lang='ts'>
-  import { Button, Input } from '@/components/ui' 
-  
-  const props = defineProps<{ modelValue?: any }>()
-  defineEmits(['submit'])
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Button, Input } from '@/components/ui'
+import { use{{className}}Store } from '../store'
+
+const store = use{{className}}Store()
+
+defineEmits(['submit'])
+
+/**
+ * Garante que sempre exista um objeto
+ * para bindar no formulário
+ */
+const form = computed(() => {
+  if (!store.item) {
+    store.item = {} as any
+  }
+
+  return store.item
+})
 </script>
 
 <template>
-  <form @submit.prevent="$emit('submit')" class='space-y-4'>
-    <Input placeholder='Nome' />
-    <Button type='submit'>Salvar</Button>
+  <form class="space-y-4" @submit.prevent="$emit('submit', form)">
+    {{#each fields}}
+    {{#unless (eq name "id")}}
+    <Input
+      v-model="form.{{name}}"
+      placeholder="{{name}}"
+      :disabled="store.loading"
+    />
+    {{/unless}}
+    {{/each}}
+
+    <Button type="submit" :loading="store.loading">
+      Salvar
+    </Button>
   </form>
 </template>

@@ -1,0 +1,77 @@
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import type { {{className}} } from './types'
+import type { ApiResponse } from '@/types/api'
+import { api } from '@/services/api'
+import { handleError } from '@/utils/handleError'
+
+export const use{{className}}Store = defineStore('{{moduleName}}', () => {
+  const loading = ref(false)
+  const items = ref<{{className}}[]>([])
+  const item = ref<{{className}} | null>(null)
+
+  async function fetchData() {
+    loading.value = true
+
+    try {
+      const { data } = await api.get<ApiResponse<{{className}}[]>>(
+        '/api/{{moduleName}}'
+      )
+
+      items.value = data.data
+    } catch (error: any) {
+      handleError(error?.response)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function storeData() {
+    loading.value = true
+
+    try {
+      const { data } = await api.post<ApiResponse<{{className}}>>(
+        '/api/{{moduleName}}',
+        item.value
+      )
+
+      item.value = data.data
+      return data.data
+    } catch (error: any) {
+      handleError(error?.response)
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function updateData() {
+    if (!payload.id) return
+
+    loading.value = true
+
+    try {
+      const { data } = await api.put<ApiResponse<{{className}}>>(
+        `/api/{{moduleName}}/${item.value.id}/update`,
+        item.value
+      )
+
+      item.value = data.data
+      return data.data
+    } catch (error: any) {
+      handleError(error?.response)
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    loading,
+    items,
+    item,
+    fetchData,
+    storeData,
+    updateData,
+  }
+})

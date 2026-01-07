@@ -5,9 +5,22 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Handlebars from 'handlebars'
 
+/**
+ * =========================
+ * Setup ESM
+ * =========================
+ */
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+/**
+ * =========================
+ * Argumento CLI
+ * =========================
+ * Ex:
+ *  npm run crud:make users
+ *  npm run crud:make master/users
+ */
 const rawPath = process.argv[2]
 
 if (!rawPath) {
@@ -15,19 +28,32 @@ if (!rawPath) {
   process.exit(1)
 }
 
-// normaliza barras (Windows/Linux)
+/**
+ * =========================
+ * Normalização de path
+ * =========================
+ */
 const normalizedPath = rawPath.replace(/\\/g, '/')
+const segments = normalizedPath.split('/').filter(Boolean)
 
-// separa segmentos
-const segments = normalizedPath.split('/')
-
-// último é o recurso
+/**
+ * =========================
+ * Resource / Namespace
+ * =========================
+ */
 const resource = segments.pop()
-
-// caminho base (namespace)
 const namespacePath = segments.join('/')
 
-// helpers
+if (!resource) {
+  console.error('❌ Nome do recurso inválido')
+  process.exit(1)
+}
+
+/**
+ * =========================
+ * Helpers de nome
+ * =========================
+ */
 const toPascalCase = (str) =>
   str
     .split('-')
@@ -37,49 +63,143 @@ const toPascalCase = (str) =>
 const moduleName = resource.toLowerCase()
 const className = toPascalCase(resource)
 
-// diretório final
+/**
+ * =========================
+ * Paths
+ * =========================
+ */
 const basePath = path.resolve(
   `src/modules/${namespacePath ? namespacePath + '/' : ''}${moduleName}`,
 )
 
-if (!name) {
-  console.error('❌ Informe o nome do CRUD. Ex: crud:make users')
-  process.exit(1)
+/**
+ * Schema esperado em:
+ * src/modules/<namespace>/<resource>/types.ts
+ */
+const schemaPath = path.resolve(`src/modules/${namespacePath}/${resource}/types.ts`)
+
+/**
+ * =========================
+ * Parser simples do schema
+ * =========================
+ */
+function parseInterfaceFields(filePath) {
+  if (!fs.existsSync(filePath)) {
+    console.error(`❌ Arquivo types.ts não encontrado: ${filePath}`)
+    process.exit(1)
+  }
+
+  const content = fs.readFileSync(filePath, 'utf8')
+
+  const interfaceMatch = content.match(/interface\s+\w+\s*{([\s\S]*?)}/)
+
+  if (!interfaceMatch) {
+    console.error('❌ Nenhuma interface encontrada em types.ts')
+    process.exit(1)
+  }
+
+  const body = interfaceMatch[1]
+
+  return body
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !line.startsWith('//'))
+    .map((line) => {
+      const match = line.match(/(\w+)\??:\s*(\w+)/)
+      if (!match) return null
+
+      return {
+        name: match[1],
+        type: match[2],
+      }
+    })
+    .filter(Boolean)
 }
 
-const moduleName = name.toLowerCase()
-const className = name.charAt(0).toUpperCase() + name.slice(1)
+/**
+ * =========================
+ * Leitura dos campos
+ * =========================
+ */
+const fields = parseInterfaceFields(schemaPath)
 
-const basePath = path.resolve(`src/modules/${moduleName}`)
-
+/**
+ * =========================
+ * Criação de pastas
+ * =========================
+ */
 const folders = ['pages', 'components']
 
-folders.forEach((folder) => fs.mkdirSync(path.join(basePath, folder), { recursive: true }))
+folders.forEach((folder) => {
+  fs.mkdirSync(path.join(basePath, folder), { recursive: true })
+})
 
+/**
+ * =========================
+ * Templates
+ * =========================
+ */
 const templatesPath = path.join(__dirname, 'templates')
 
 const files = [
-  { tpl: 'index.vue.hbs', out: 'pages/index.vue' },
-  { tpl: 'create.vue.hbs', out: 'pages/create.vue' },
-  { tpl: 'update.vue.hbs', out: 'pages/update.vue' },
-  { tpl: 'form.vue.hbs', out: `components/${className}Form.vue` },
-  { tpl: 'routes.ts.hbs', out: 'routes.ts' },
-  { tpl: 'types.ts.hbs', out: 'types.ts' },
+  { template: 'index.vue.hbs', output: 'pages/index.vue' },
+  { template: 'create.vue.hbs', output: 'pages/create.vue' },
+  { template: 'update.vue.hbs', output: 'pages/update.vue' },
+  {
+    template: 'form.vue.hbs',
+    output: `components/${className}Form.vue`,
+  },
+  { template: 'store.ts.hbs', output: 'store.ts' }, // 🆕
+  { template: 'routes.ts.hbs', output: 'routes.ts' },
 ]
 
-files.forEach(({ tpl, out }) => {
-  const template = fs.readFileSync(path.join(templatesPath, tpl), 'utf8')
-  const compiled = Handlebars.compile(template)
+/**
+ * =========================
+ * Helpers Handlebars
+ * =========================
+ */
+Handlebars.registerHelper('eq', (a, b) => a === b)
 
-  const fullRoute = [...segments, moduleName].join('/')
+/**
+ * =========================
+ * Geração dos arquivos
+ * =========================
+ */
+files.forEach(({ template, output }) => {
+  const templatePath = path.join(templatesPath, template)
 
-  const content = compiled({
+  if (!fs.existsSync(templatePath)) {
+    console.error(`❌ Template não encontrado: ${template}`)
+    process.exit(1)
+  }
+
+  const source = fs.readFileSync(templatePath, 'utf8')
+  const compile = Handlebars.compile(source)
+
+  const content = compile({
     moduleName,
     className,
-    fullRoute,
+    namespace: namespacePath,
+    fullRoute: [...segments, moduleName].join('/'),
+    fields,
   })
 
-  fs.writeFileSync(path.join(basePath, out), content)
+  const outputPath = path.join(basePath, output)
+
+  if (fs.existsSync(outputPath)) {
+    console.warn(`⚠️ Arquivo já existe, ignorado: ${output}`)
+    return
+  }
+
+  fs.writeFileSync(outputPath, content)
 })
 
-console.log(`✅ CRUD "${moduleName}" criado com sucesso`)
+console.log(`
+✅ CRUD criado com sucesso!
+
+📦 Recurso: ${moduleName}
+📁 Namespace: ${namespacePath || '(root)'}
+📍 Caminho: ${basePath}
+🧠 Schema: ${schemaPath}
+`)

@@ -1,17 +1,38 @@
 <script setup lang='ts'>
-  import { Button, Table } from '@/components/ui'
+import { Button, Table } from '@/components/ui'
+import { onMounted } from 'vue'
+import { use{{className}}Store } from '../store'
+import { storeToRefs } from 'pinia'
+
+const { fetchData } = use{{className}}Store()
+const { items } = storeToRefs(useUserStore())
+
+onMounted(async () => {
+  await fetchData()
+})
+
+const columns = [
+  {{#each fields}}
+  {{#unless (eq name "id")}}
+  {
+    key: '{{name}}',
+    label: '{{name}}',
+  },
+  {{/unless}}
+  {{/each}}
+]
 </script>
 
 <template>
   <div class='space-y-4'>
     <div class='flex justify-between'>
       <h1 class='text-xl font-bold'>{{className}}</h1>
-      <Button to='/{{moduleName}}/create'>Novo</Button>
+      <Button to='/{{fullRoute}}/create'>Novo</Button>
     </div>
 
-    <Table :columns='[]' :data='' has-actions density='compact' variant='elevated'>
+    <Table :columns='columns' :data='items' has-actions density='compact' variant='elevated'>
       <template #actions='{ row }'>
-        <Button variant='secondary' to='`/{{modulename}}/${row.id}/edit`'> Editar </Button>
+        <Button variant='secondary' to='`/{{fullRoute}}/${row.id}/edit`'> Editar </Button>
       </template>
     </Table>
   </div>
