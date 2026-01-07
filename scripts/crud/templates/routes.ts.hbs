@@ -1,0 +1,16 @@
+import type { RouteRecordRaw } from 'vue-router'
+
+export const {{ moduleName }}Routes: RouteRecordRaw[] = [
+  {
+    path: '/{{ fullRoute }}',
+    component: () => import('./pages/index.vue'),
+  },
+  {
+    path: '/{{ fullRoute }}/create',
+    component: () => import('./pages/create.vue'),
+  },
+  {
+    path: '/{{ fullRoute }}/:id/edit',
+    component: () => import('./pages/update.vue'),
+  },
+]

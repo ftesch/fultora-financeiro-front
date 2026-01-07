@@ -1,0 +1,13 @@
+<script setup lang='ts'>
+  import { Button, Input } from '@/components/ui' 
+  
+  const props = defineProps<{ modelValue?: any }>()
+  defineEmits(['submit'])
+</script>
+
+<template>
+  <form @submit.prevent="$emit('submit')" class='space-y-4'>
+    <Input placeholder='Nome' />
+    <Button type='submit'>Salvar</Button>
+  </form>
+</template>
