@@ -4,8 +4,8 @@ export interface Company {
   email: string | null
   phone: string | null
   type_person: string | null
-  active: string | null
-  principal: string | null
+  active?: string | null
+  principal?: string | null
   id_fiscal: string | null
   endereco: string | null
   numero: string | null
@@ -16,7 +16,7 @@ export interface Company {
   cep: string | null
   id_ibge: string | null
   created_by: string | null
-  updated_by: string | null
+  updated_by?: string | null
 }
 
 export function createEmptyCompany(): Company {

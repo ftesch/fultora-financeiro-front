@@ -2,12 +2,20 @@
   <header class="border-b bg-card">
     <div class="flex h-14 items-center justify-between px-6">
       <!-- Esquerda: Nome do módulo -->
-      <div class="flex items-center gap-4">
-        <h1 class="text-lg font-semibold">
-          {{ currentModule }}
+      <div class="flex items-center gap-2">
+        <!-- Botão hamburguer -->
+        <button
+          class="lg:hidden inline-flex items-center justify-center p-2"
+          @click="$emit('toggle-sidebar')"
+        >
+          <Menu class="h-5 w-5" />
+        </button>
+
+        <!-- Nome da empresa -->
+        <h1 class="text-lg font-semibold leading-none">
+          {{ company?.name }}
         </h1>
       </div>
-
       <!-- Direita: ações -->
       <div class="flex items-center gap-3">
         <!-- Menu de módulos -->
@@ -17,9 +25,14 @@
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem> Marketplace </DropdownMenuItem>
-            <DropdownMenuItem> Relatórios </DropdownMenuItem>
-            <DropdownMenuItem> Automação </DropdownMenuItem>
+            <DropdownMenuItem @click="goToHome">
+              <Home class="h-4 w-4 text-muted-foreground" />
+              <span>App Home</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem v-for="module in modules" @click="go(module)">
+              <component :is="module.icon" class="h-4 w-4 text-muted-foreground" />
+              {{ module.name }}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -53,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { Sun, Moon } from 'lucide-vue-next'
+import { Sun, Moon, Menu, Home } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -65,12 +78,26 @@ import {
 import { useAuthStore } from '@/stores/auth'
 const { logout } = useAuthStore()
 
-const { user } = storeToRefs(useAuthStore())
+const { user, company } = storeToRefs(useAuthStore())
 
 import { useTheme } from '@/composables/useTheme'
 import { storeToRefs } from 'pinia'
+import { useModulesStore } from '@/stores/module'
+import type { Module } from '@/types/auth'
+import router from '@/router'
 
 const { theme, toggleTheme } = useTheme()
 
-const currentModule = 'Marketplace'
+const { modules } = storeToRefs(useModulesStore())
+
+defineEmits<{
+  (e: 'toggle-sidebar'): void
+}>()
+
+const go = (module: Module) => {
+  router.push(module.route)
+}
+const goToHome = () => {
+  router.push('/app')
+}
 </script>

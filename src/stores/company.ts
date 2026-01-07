@@ -2,20 +2,29 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createEmptyCompany, type Company } from '@/types/company'
 import { handleError } from '@/utils/helpers'
+import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
+import { useAuthStore } from './auth'
 
 export const useCompanyStore = defineStore('company', () => {
   const company = ref<Company>(createEmptyCompany())
   const loading = ref<boolean>(false)
-  const hasPrincipalCompany = computed(() => !!company.value?.id)
+  const hasPrincipalCompany = computed(() => !!company.value?.name)
 
   async function storeCompany() {
     loading.value = false
 
     try {
-      const { data } = await api.post('/api/company', company.value)
+      const { data } = await api.post<ApiResponse<Company>>('/api/company', company.value)
 
       company.value = data.data
+
+      const { setCompany } = useAuthStore()
+
+      setCompany({
+        name: company.value.name,
+        id_fiscal: company.value.id_fiscal,
+      })
     } catch (error: any) {
       handleError(error?.response)
 
@@ -25,13 +34,23 @@ export const useCompanyStore = defineStore('company', () => {
     }
   }
 
+  async function setCompany(payload: Company) {
+    company.value = payload
+  }
+
   async function fetchPrincipalCompany() {
     loading.value = false
 
     try {
-      const { data } = await api.get('/api/company/principal')
+      const { data } = await api.get<ApiResponse<Company>>('/api/company/principal')
 
       company.value = data.data
+
+      const { setCompany } = useAuthStore()
+      setCompany({
+        name: company.value.name,
+        id_fiscal: company.value.id_fiscal,
+      })
     } catch (error: any) {
     } finally {
       loading.value = false
@@ -70,5 +89,6 @@ export const useCompanyStore = defineStore('company', () => {
     fetchPrincipalCompany,
     hasPrincipalCompany,
     searchCEP,
+    setCompany,
   }
 })

@@ -8,12 +8,15 @@ import { useAuthStore } from '@/stores/auth'
 import Login from '@/pages/auth/Login.vue'
 import Marketplace from '@/pages/marketplace/Index.vue'
 import App from '@/pages/app/Index.vue'
+import Master from '@/pages/master/Index.vue'
 
 // Layout
 import AppLayout from '@/components/layout/AppLayout.vue'
 import GuestLayout from '@/components/layout/GuestLayout.vue'
 import Register from '@/pages/auth/Register.vue'
 import MarketplacePurchase from '@/pages/marketplace/MarketplacePurchase.vue'
+import NotFound from '@/pages/NotFound.vue'
+import MasterLayout from '@/components/layout/MasterLayout.vue'
 
 // ⚠️ temporário (depois vira Pinia)
 // const isAuthenticated = () => {
@@ -66,10 +69,29 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
+  {
+    path: '/master',
+    component: MasterLayout,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        redirect: '/master/home',
+      },
+      {
+        path: 'home',
+        name: 'master.home',
+        component: Master,
+      },
+    ],
+  },
   // fallback
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/',
+    name: 'not-found',
+    component: NotFound,
   },
 ]
 

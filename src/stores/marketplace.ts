@@ -4,6 +4,7 @@ import type { Modules, Plans, PurchasePlan } from '@/types/marketplace'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
+import { useCompanyStore } from './company'
 
 export const useMarketplaceStore = defineStore('marketplace', () => {
   const modules = ref<Modules[]>([])

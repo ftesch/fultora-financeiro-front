@@ -3,18 +3,22 @@ import { ref, computed } from 'vue'
 import api from '@/services/api'
 import router from '@/router'
 
-import type { User, LoginCredentials, Modules } from '@/types/auth'
-import { handleError, showErrorToast } from '@/utils/helpers'
+import type { User, LoginCredentials, Company, LoginResponse } from '@/types/auth'
+import { handleError } from '@/utils/helpers'
+import type { ApiResponse } from '@/types/common'
+import { useModulesStore } from './module'
 
 export const useAuthStore = defineStore('auth', () => {
   /* ===============================
    * STATE
    * =============================== */
   const user = ref<User | null>(null)
+  const company = ref<Company | null>(null)
   const token = ref<string | null>(localStorage.getItem('auth_token'))
   const loading = ref(false)
 
   const isAuthenticated = computed(() => !!user.value)
+  const plans = computed(() => company.value?.plans)
 
   const getModules = computed(() => {
     return user.value?.modules
@@ -40,14 +44,19 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await getCsrfCookie()
 
-      const { data } = await api.post('/api/login', credentials)
+      const { data } = await api.post<ApiResponse<LoginResponse>>('/api/login', credentials)
 
       user.value = data.data.user
+      company.value = data.data.company
       token.value = data.data.token ?? null
 
       if (data.data.token) {
         localStorage.setItem('auth_token', data.data.token)
       }
+
+      const { setModules } = useModulesStore()
+      setModules(user.value.modules)
+
       router.push('/app')
     } catch (error: any) {
       handleError(error?.response)
@@ -85,14 +94,23 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true
 
     try {
-      const { data } = await api.get('/api/user')
-      user.value = data
+      const { data } = await api.get<ApiResponse<LoginResponse>>('/api/user')
+      user.value = data.data.user
+      company.value = data.data.company
+
+      const { setModules } = useModulesStore()
+      setModules(user.value.modules)
     } catch {
       user.value = null
+      company.value = null
       token.value = null
     } finally {
       loading.value = false
     }
+  }
+
+  function setCompany(payload: Company) {
+    company.value = payload
   }
 
   const initAuth = async () => {
@@ -103,11 +121,16 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = savedToken
 
     try {
-      const { data } = await api.get('/api/user')
-      user.value = data.data
+      const { data } = await api.get<ApiResponse<LoginResponse>>('/api/user')
+      user.value = data.data.user
+      company.value = data.data.company
+
+      const { setModules } = useModulesStore()
+      setModules(user.value.modules)
     } catch {
       // token inválido / expirado
       user.value = null
+      company.value = null
       token.value = null
       localStorage.removeItem('auth_token')
     }
@@ -146,9 +169,11 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     // state
     user,
+    company,
     token,
     loading,
     isAuthenticated,
+    plans,
 
     // actions
     login,
@@ -157,5 +182,6 @@ export const useAuthStore = defineStore('auth', () => {
     initAuth,
     register,
     getModules,
+    setCompany,
   }
 })
