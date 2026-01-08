@@ -1,14 +1,32 @@
 <script setup lang="ts">
+import { Button, PageContainer } from '@/components/ui'
 import {{className}}Form from '../components/{{className}}Form.vue'
 import { use{{className}}Store } from '../store'
+import { storeToRefs } from 'pinia'
+import { ArrowLeft } from 'lucide-vue-next'
+import { onMounted } from 'vue'
+import router from '@/router'
 
-const store = use{{className}}Store()
+const { storeData, resetItem } = use{{className}}Store()
+const { loading } = storeToRefs(use{{className}}Store())
 
 async function submit() {
-  await store.storeData()
+  await storeData()
+  router.push("{{fullRoute}}")
 }
+
+onMounted(() => {
+  resetItem()
+})
+
 </script>
 
 <template>
-  <{{className}}Form @submit="submit" />
+  <PageContainer title="Novo Registro" :loading="loading">
+    <template #actions>
+      <Button to="{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+    </template>
+
+    <{{className}}Form @submit="submit" />
+  </PageContainer>
 </template>

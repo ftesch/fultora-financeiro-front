@@ -1,23 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { {{className}} } from './types'
-import type { ApiResponse } from '@/types/common'
+import type { User } from './types'
 import api from '@/services/api'
+import type { ApiResponse } from '@/types/common'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
 
-export const use{{className}}Store = defineStore('{{moduleName}}', () => {
+export const useUserStore = defineStore('user', () => {
   const loading = ref(false)
-  const items = ref<{{className}}[]>([])
-  const item = ref<{{className}} | null>(null)
+  const items = ref<User[]>([])
+  const item = ref<User | null>(null)
 
   async function fetchData() {
     loading.value = true
 
     try {
-      const { data } = await api.get<ApiResponse<{{className}}[]>>(
-        '/api/{{moduleName}}'
-      )
+      const { data } = await api.get<ApiResponse<User[]>>('/api/master/user')
 
       items.value = data.data
     } catch (error: any) {
@@ -31,14 +29,12 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     loading.value = true
 
     try {
-      const { data } = await api.post<ApiResponse<{{className}}>>(
-        '/api/{{moduleName}}',
-        item.value
-      )
+      const { data } = await api.post<ApiResponse<User>>('/api/master/user', item.value)
 
       item.value = data.data
       items.value.push(data.data)
-      toast.success(data.message ?? 'Registro Criado')
+
+      toast.success(data.message ?? 'Usuario Criado')
       return data.data
     } catch (error: any) {
       handleError(error?.response)
@@ -49,19 +45,18 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
   }
 
   async function updateData() {
-    if (!payload/value?.id) return
+    if (!item.value?.id) return
 
     loading.value = true
 
     try {
-      const { data } = await api.put<ApiResponse<{{className}}>>(
-        `/api/{{moduleName}}/${item.value?.id}/update`,
-        item.value
+      const { data } = await api.put<ApiResponse<User>>(
+        `/api/master/user/${item.value?.id}`,
+        item.value,
       )
 
       item.value = data.data
       toast.success(data.message ?? 'Usuario Atualizado')
-
       return data.data
     } catch (error: any) {
       handleError(error?.response)
@@ -77,6 +72,8 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     try {
       const found = items.value.find((item) => String(item.id) === String(id))
 
+      console.log(found)
+
       if (found) {
         item.value = { ...found }
         return item.value
@@ -91,28 +88,18 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     }
   }
 
-  function createEmptyItem(): {{className}} {
+  function createEmptyItem(): User {
     return {
-      {{#each fields}}
-      {{#unless (eq name "id")}}
-      {{#if (eq type "string")}}
-      {{name}}: '',
-      {{/if}}
-      {{#if (eq type "number")}}
-      {{name}}: null,
-      {{/if}}
-      {{#if (eq type "boolean")}}
-      {{name}}: false,
-      {{/if}}
-      {{/unless}}
-      {{/each}}
+      name: '',
+      email: '',
+      created_at: '',
+      updated_at: '',
     }
   }
 
   function resetItem() {
     item.value = createEmptyItem()
   }
-
 
   return {
     resetItem,

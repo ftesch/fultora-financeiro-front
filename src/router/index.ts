@@ -17,11 +17,7 @@ import Register from '@/pages/auth/Register.vue'
 import MarketplacePurchase from '@/pages/marketplace/MarketplacePurchase.vue'
 import NotFound from '@/pages/NotFound.vue'
 import MasterLayout from '@/components/layout/MasterLayout.vue'
-
-// ⚠️ temporário (depois vira Pinia)
-// const isAuthenticated = () => {
-//   return false // alterar depois
-// }
+import { userRoutes } from '@/modules/master/user/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -85,6 +81,7 @@ const routes: RouteRecordRaw[] = [
         name: 'master.home',
         component: Master,
       },
+      ...userRoutes,
     ],
   },
   // fallback

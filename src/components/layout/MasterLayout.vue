@@ -28,7 +28,7 @@
           <nav class="mt-2">
             <SidebarItem to="/" label="Home" :icon="Home" />
             <SidebarItem to="/master/empresas" label="Empresas" :icon="Building2" />
-            <SidebarItem to="/master/usuarios" label="Usuários" :icon="Users" />
+            <SidebarItem to="/master/user" label="Usuários" :icon="Users" />
             <SidebarItem to="/master/fornecedores" label="Fornecedores" :icon="Truck" />
             <SidebarItem
               to="/master/categorias-financeiras"

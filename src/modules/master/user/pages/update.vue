@@ -1,33 +1,34 @@
 <script setup lang="ts">
 import { Button, PageContainer } from '@/components/ui'
-import {{className}}Form from '../components/{{className}}Form.vue'
-import { use{{className}}Store } from '../store'
+import UserForm from '../components/UserForm.vue'
+import { useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { ArrowLeft } from 'lucide-vue-next'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import router from '@/router'
 
-const { updateData, findById } = use{{className}}Store()
-const { loading, item } = storeToRefs(use{{className}}Store())
+const { updateData, findById } = useUserStore()
+const { loading, item } = storeToRefs(useUserStore())
 const route = useRoute()
 
 async function submit() {
   await updateData()
+  router.push('/master/user')
 }
 
 onMounted(async () => {
   const id = route.params.id as string
   await findById(id)
 })
-
 </script>
 
 <template>
-  <PageContainer title="Alterar Registro" :loading="loading">
+  <PageContainer title="Alterar Usuario" :loading="loading">
     <template #actions>
-      <Button to="{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button to="/master/user" variant="secondary" :icon="ArrowLeft" label="Voltar" />
     </template>
 
-    <{{className}}Form :model-value="item" @submit="submit" />
+    <UserForm :model-value="item" @submit="submit" />
   </PageContainer>
 </template>

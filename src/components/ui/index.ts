@@ -49,6 +49,7 @@ export { default as Label } from '@/components/common/AppLabel.vue'
 export { default as Table } from '@/components/common/AppTable.vue'
 export { default as Dialog } from '@/components/common/AppDialog.vue'
 export { default as MasketInput } from '@/components/common/AppMaskedInput.vue'
+export { default as PageContainer } from '@/components/common/AppPageContainer.vue'
 
 export {
   Select,
