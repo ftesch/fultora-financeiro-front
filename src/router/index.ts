@@ -18,6 +18,8 @@ import MarketplacePurchase from '@/pages/marketplace/MarketplacePurchase.vue'
 import NotFound from '@/pages/NotFound.vue'
 import MasterLayout from '@/components/layout/MasterLayout.vue'
 import { userRoutes } from '@/modules/master/user/routes'
+import { companyRoutes } from '@/modules/master/company/routes'
+import { FinancialCategoryRoutes } from '@/modules/master/financial_category/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -82,6 +84,8 @@ const routes: RouteRecordRaw[] = [
         component: Master,
       },
       ...userRoutes,
+      ...companyRoutes,
+      ...FinancialCategoryRoutes,
     ],
   },
   // fallback

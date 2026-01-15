@@ -1,25 +1,23 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { {{className}} } from './types'
+import type { FinancialCategory } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
 
-const APIRoute = ''
+const APIRoute = '/api/master/financial_category'
 
-export const use{{className}}Store = defineStore('{{moduleName}}', () => {
+export const useFinancialCategoryStore = defineStore('FinancialCategory', () => {
   const loading = ref(false)
-  const items = ref<{{className}}[]>([])
-  const item = ref<{{className}} | null>(null)
+  const items = ref<FinancialCategory[]>([])
+  const item = ref<FinancialCategory | null>(null)
 
   async function fetchData() {
     loading.value = true
 
     try {
-      const { data } = await api.get<ApiResponse<{{className}}[]>>(
-        `${APIRoute}`/{{moduleName}}`
-      )
+      const { data } = await api.get<ApiResponse<FinancialCategory[]>>(`${APIRoute}`)
 
       items.value = data.data
     } catch (error: any) {
@@ -29,14 +27,15 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     }
   }
 
+  async function fechOnlyData() {
+    return await api.get<ApiResponse<any[]>>(`/api/util/financial_category/search`)
+  }
+
   async function storeData() {
     loading.value = true
 
     try {
-      const { data } = await api.post<ApiResponse<{{className}}>>(
-        `${APIRoute}`,
-        item.value
-      )
+      const { data } = await api.post<ApiResponse<FinancialCategory>>(`${APIRoute}`, item.value)
 
       item.value = data.data
       items.value.push(data.data)
@@ -51,17 +50,16 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
   }
 
   async function updateData() {
-
     loading.value = true
 
     try {
-      const { data } = await api.put<ApiResponse<{{className}}>>(
-        `${APIRoute}`/${item.value?.id}`,
-        item.value
+      const { data } = await api.put<ApiResponse<FinancialCategory>>(
+        `${APIRoute}/${item.value?.id}`,
+        item.value,
       )
 
       item.value = data.data
-      toast.success(data.message ?? 'Usuario Atualizado')
+      toast.success(data.message ?? 'Registro Atualizado')
 
       return data.data
     } catch (error: any) {
@@ -82,10 +80,9 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
         item.value = { ...found }
         return item.value
       } else {
-        const { data } = await api.get<ApiResponse<{{className}}>>(`${APIRoute}/${id}`)
+        const { data } = await api.get<ApiResponse<FinancialCategory>>(`${APIRoute}/${id}`)
         item.value = data.data
       }
-
 
       return null
     } catch (error: any) {
@@ -96,28 +93,20 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     }
   }
 
-  function createEmptyItem(): {{className}} {
+  function createEmptyItem(): FinancialCategory {
     return {
-      {{#each fields}}
-      {{#unless (eq name "id")}}
-      {{#if (eq type "string")}}
-      {{name}}: '',
-      {{/if}}
-      {{#if (eq type "number")}}
-      {{name}}: null,
-      {{/if}}
-      {{#if (eq type "boolean")}}
-      {{name}}: false,
-      {{/if}}
-      {{/unless}}
-      {{/each}}
+      name: '',
+      type: 'D',
+      account: '',
+      level: 0,
+      financial_category_id: null,
+      financialParent: null,
     }
   }
 
   function resetItem() {
     item.value = createEmptyItem()
   }
-
 
   return {
     resetItem,
@@ -128,5 +117,6 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     fetchData,
     storeData,
     updateData,
+    fechOnlyData,
   }
 })

@@ -1,88 +1,67 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog'
 
-import { Button } from '@/components/ui'
-
-type DialogDensity = 'default' | 'compact'
+import { Button } from '@/components/ui/button'
 
 const props = defineProps<{
-  open: boolean
-  title?: string
-  description?: string
-  confirmText?: string
-  cancelText?: string
-  loading?: boolean
-  density?: DialogDensity
+  modelValue: boolean
+  title: string
+  size?: 'small' | 'medium' | 'large'
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:open', value: boolean): void
-  (e: 'confirm'): void
-  (e: 'cancel'): void
+  (e: 'update:modelValue', value: boolean): void
 }>()
 
-function onCancel() {
-  emit('cancel')
-  emit('update:open', false)
-}
+const open = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+})
 
-const density = props.density ?? 'default'
-
-const densityClassMap = {
-  default: {
-    content: 'sm:max-w-3xl',
-    header: 'pb-4 gap-2',
-    body: 'max-h-[70vh] overflow-y-auto pr-1 pt-4',
-    footer: 'gap-2 pt-4',
-    title: 'text-lg',
-    description: '',
-  },
-  compact: {
-    content: 'sm:max-w-3xl',
-    header: 'pb-2 gap-1',
-    body: 'max-h-[70vh] overflow-y-auto pr-0 pt-2',
-    footer: 'gap-1 pt-2',
-    title: 'text-base',
-    description: 'text-sm',
-  },
-}
+const sizeClass = computed(() => {
+  switch (props.size) {
+    case 'small':
+      return 'max-w-md'
+    case 'large':
+      return 'max-w-[90vw]'
+    default:
+      return 'max-w-2xl'
+  }
+})
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="emit('update:open', $event)">
-    <DialogContent :class="densityClassMap[density].content">
+  <Dialog v-model:open="open">
+    <DialogContent :class="[sizeClass, 'w-full max-h-[90vh] flex flex-col p-0']">
       <!-- Header -->
-      <DialogHeader v-if="title || description" :class="densityClassMap[density].header">
-        <DialogTitle v-if="title" :class="densityClassMap[density].title">
+      <DialogHeader class="px-6 py-4 border-b">
+        <DialogTitle class="text-lg font-semibold">
           {{ title }}
         </DialogTitle>
-
-        <DialogDescription v-if="description" :class="densityClassMap[density].description">
-          {{ description }}
-        </DialogDescription>
       </DialogHeader>
 
-      <!-- Conteúdo -->
-      <div :class="densityClassMap[density].body">
+      <!-- Body (scrollável) -->
+      <div class="flex-1 overflow-y-auto px-2 py-1">
         <slot />
       </div>
 
       <!-- Footer -->
-      <DialogFooter :class="densityClassMap[density].footer">
-        <Button variant="outline" type="button" :disabled="loading" @click="onCancel">
-          {{ cancelText ?? 'Cancelar' }}
-        </Button>
+      <DialogFooter class="flex items-center justify-between gap-2 px-6 py-4 border-t">
+        <!-- Left -->
+        <Button variant="outline" @click="open = false"> Fechar </Button>
 
-        <Button type="button" :loading="loading" @click="emit('confirm')">
-          {{ confirmText ?? 'Salvar' }}
-        </Button>
+        <!-- Right actions -->
+        <div class="flex items-center gap-2">
+          <slot name="actions" />
+        </div>
       </DialogFooter>
     </DialogContent>
   </Dialog>

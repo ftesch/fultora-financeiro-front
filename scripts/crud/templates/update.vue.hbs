@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Button, PageContainer } from '@/components/ui'
+import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import {{className}}Form from '../components/{{className}}Form.vue'
 import { use{{className}}Store } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft } from 'lucide-vue-next'
-import { onMounted } from 'vue'
+import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const { updateData, findById } = use{{className}}Store()
@@ -20,14 +20,21 @@ onMounted(async () => {
   await findById(id)
 })
 
+const activeTab = ref('basic')
+
 </script>
 
 <template>
-  <PageContainer title="Alterar Registro" :loading="loading">
+  <PageContainer title="Alterar" :loading="loading">
     <template #actions>
-      <Button to="{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button to="/{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button :icon="Save" @click="submit" />
     </template>
 
-    <{{className}}Form :model-value="item" @submit="submit" />
+    <PageTabs v-model="activeTab">
+      <PageTab name="basic" label="Básico" :icon="FileText">
+        <{{className}}Form :model-value="item" @submit="submit" mode="edit" />
+      </PageTab>
+    </PageTabs>
   </PageContainer>
 </template>

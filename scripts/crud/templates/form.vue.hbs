@@ -2,8 +2,16 @@
 import { computed } from 'vue'
 import { Button, Input } from '@/components/ui'
 import { use{{className}}Store } from '../store'
+import { storeToRefs } from 'pinia'
 
-const store = use{{className}}Store()
+
+const { loading, item } = storeToRefs(use{{className}}Store())
+const { resetItem } = useCompanyStore()
+
+const props = defineProps<{
+  mode?: 'create' | 'edit'
+}>()
+const isEdit = computed(() => props.mode === 'edit')
 
 defineEmits(['submit'])
 
@@ -12,22 +20,26 @@ defineEmits(['submit'])
  * para bindar no formulário
  */
 const form = computed(() => {
-  if (!store.item) {
-    store.item = {} as any
+  if (!item) {
+    resetItem()
   }
-
-  return store.item
+  return item.value!
 })
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="$emit('submit', form)">
+  <form     
+    v-if="form"
+    class="space-y-4 gap-3 bg-secondary/40 p-4 rounded-xl"
+    @submit.prevent="$emit('submit', form)"
+  >
     {{#each fields}}
     {{#unless (eq name "id")}}
     <Input
+      :horizontal="true" 
       v-model="form.{{name}}"
       placeholder="{{name}}"
-      :disabled="store.loading"
+      :disabled="loading"
     />
     {{/unless}}
     {{/each}}

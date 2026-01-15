@@ -1,25 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { {{className}} } from './types'
+import type { Company } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
 
-const APIRoute = ''
-
-export const use{{className}}Store = defineStore('{{moduleName}}', () => {
+export const useCompanyStore = defineStore('company', () => {
   const loading = ref(false)
-  const items = ref<{{className}}[]>([])
-  const item = ref<{{className}} | null>(null)
+  const items = ref<Company[]>([])
+  const item = ref<Company | null>(null)
 
   async function fetchData() {
     loading.value = true
 
     try {
-      const { data } = await api.get<ApiResponse<{{className}}[]>>(
-        `${APIRoute}`/{{moduleName}}`
-      )
+      const { data } = await api.get<ApiResponse<Company[]>>('/api/master/company')
 
       items.value = data.data
     } catch (error: any) {
@@ -33,10 +29,7 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     loading.value = true
 
     try {
-      const { data } = await api.post<ApiResponse<{{className}}>>(
-        `${APIRoute}`,
-        item.value
-      )
+      const { data } = await api.post<ApiResponse<Company>>('/api/master/company', item.value)
 
       item.value = data.data
       items.value.push(data.data)
@@ -51,13 +44,12 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
   }
 
   async function updateData() {
-
     loading.value = true
 
     try {
-      const { data } = await api.put<ApiResponse<{{className}}>>(
-        `${APIRoute}`/${item.value?.id}`,
-        item.value
+      const { data } = await api.put<ApiResponse<Company>>(
+        `/api/master/company/${item.value?.id}`,
+        item.value,
       )
 
       item.value = data.data
@@ -82,10 +74,9 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
         item.value = { ...found }
         return item.value
       } else {
-        const { data } = await api.get<ApiResponse<{{className}}>>(`${APIRoute}/${id}`)
+        const { data } = await api.get<ApiResponse<Company>>(`/api/master/company/${id}`)
         item.value = data.data
       }
-
 
       return null
     } catch (error: any) {
@@ -96,28 +87,48 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     }
   }
 
-  function createEmptyItem(): {{className}} {
+  function createEmptyItem(): Company {
     return {
-      {{#each fields}}
-      {{#unless (eq name "id")}}
-      {{#if (eq type "string")}}
-      {{name}}: '',
-      {{/if}}
-      {{#if (eq type "number")}}
-      {{name}}: null,
-      {{/if}}
-      {{#if (eq type "boolean")}}
-      {{name}}: false,
-      {{/if}}
-      {{/unless}}
-      {{/each}}
-    }
+      name: '',
+      email: '',
+      phone: '',
+      type_person: '',
+      active: true,
+      id_fiscal: '',
+      endereco: '',
+      numero: '',
+      complemento: '',
+      bairro: '',
+      cidade: '',
+      estado: '',
+      cep: '',
+      id_ibge: 0,
+    } as Company
   }
 
   function resetItem() {
     item.value = createEmptyItem()
   }
 
+  async function searchCEP() {
+    loading.value = false
+
+    try {
+      const { data } = await api.get(`/api/util/cep?cep=${item?.value?.cep}`)
+      const endereco = data.data
+
+      item.value.endereco = endereco.endereco
+      item.value.complemento = endereco.complemento
+      item.value.bairro = endereco.bairro
+      item.value.cidade = endereco.cidade
+      item.value.estado = endereco.estado
+      item.value.id_ibge = endereco.id_ibge
+    } catch (error: any) {
+      handleError(error?.response)
+    } finally {
+      loading.value = false
+    }
+  }
 
   return {
     resetItem,
@@ -128,5 +139,7 @@ export const use{{className}}Store = defineStore('{{moduleName}}', () => {
     fetchData,
     storeData,
     updateData,
+    createEmptyItem,
+    searchCEP,
   }
 })

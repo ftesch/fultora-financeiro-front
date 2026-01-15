@@ -27,7 +27,12 @@ const form = computed(() => {
       placeholder="created_at"
       :disabled="loading"
     />
-    <Input v-model="form.updated_at" placeholder="updated_at" :disabled="loading" />
+    <Input
+      label="Data de Atualizaçao"
+      v-model="form.updated_at"
+      placeholder="updated_at"
+      :disabled="loading"
+    />
 
     <Button type="submit" :loading="loading"> Salvar </Button>
   </form>

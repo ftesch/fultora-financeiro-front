@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
-import {{className}}Form from '../components/{{className}}Form.vue'
-import { use{{className}}Store } from '../store'
+import CompanyForm from '../components/CompanyForm.vue'
+import { useCompanyStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
+import { ArrowLeft, FileText, Settings } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import router from '@/router'
 
-const { storeData, resetItem } = use{{className}}Store()
-const { loading } = storeToRefs(use{{className}}Store())
+const { storeData, resetItem } = useCompanyStore()
+const { loading } = storeToRefs(useCompanyStore())
 
 async function submit() {
   await storeData()
-  router.push("/{{fullRoute}}")
+  router.push('/master/company')
 }
 
 onMounted(() => {
@@ -20,20 +20,18 @@ onMounted(() => {
 })
 
 const activeTab = ref('basic')
-
 </script>
 
 <template>
   <PageContainer title="Novo Registro" :loading="loading">
     <template #actions>
-      <Button to="/{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
-      <Button :icon="Save" @click="submit" />
+      <Button to="/master/company" variant="secondary" :icon="ArrowLeft" label="Voltar" />
     </template>
 
     <PageTabs v-model="activeTab">
       <PageTab name="basic" label="Básico" :icon="FileText">
-        <{{className}}Form @submit="submit" mode="create" />
+        <CompanyForm @submit="submit" mode="create" />
       </PageTab>
-    </PageTabs>    
+    </PageTabs>
   </PageContainer>
 </template>

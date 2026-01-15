@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick } from 'vue'
-import { Input } from '@/components/ui'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 type MaskType = 'cpf' | 'cnpj' | 'cpf-cnpj' | 'phone'
 
@@ -8,11 +9,16 @@ const props = defineProps<{
   modelValue: string | null
   mask: MaskType
   placeholder?: string
+  label?: string
+  horizontal?: boolean
+  disabled?: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
+
+const inputId = `input-${Math.random().toString(36).substring(2, 9)}`
 
 /* ---------------- utils ---------------- */
 
@@ -42,14 +48,12 @@ function formatCNPJ(value: string) {
 /* 📱 Telefone */
 function formatPhone(value: string) {
   if (value.length <= 10) {
-    // (99) 9999-9999
     return value
       .replace(/^(\d{2})(\d)/, '($1) $2')
       .replace(/^(\(\d{2}\)\s\d{4})(\d)/, '$1-$2')
       .slice(0, 14)
   }
 
-  // (99) 99999-9999
   return value
     .replace(/^(\d{2})(\d)/, '($1) $2')
     .replace(/^(\(\d{2}\)\s\d{5})(\d)/, '$1-$2')
@@ -65,7 +69,6 @@ function applyMask(numeric: string) {
   if (props.mask === 'cnpj') return formatCNPJ(numeric)
   if (props.mask === 'phone') return formatPhone(numeric)
 
-  // cpf-cnpj automático
   return numeric.length <= 11 ? formatCPF(numeric) : formatCNPJ(numeric)
 }
 
@@ -77,28 +80,49 @@ const maskedValue = computed(() => {
 
 /* ---------------- handlers ---------------- */
 
-async function onInput(event: Event) {
-  const input = event.target as HTMLInputElement
+// async function onInput(event: Event) {
+//   const input = event.target as HTMLInputElement
 
-  const numeric = onlyNumbers(input.value)
-  const formatted = applyMask(numeric)
+//   const numeric = onlyNumbers(input.value)
+//   const formatted = applyMask(numeric)
 
-  // atualiza visualmente
-  input.value = formatted
+//   //input.value = formatted
+//   emit('update:modelValue', numeric)
 
-  // estado sempre numérico
+//   await nextTick()
+// }
+
+// function onInput(event: Event) {
+//   const input = event.target as HTMLInputElement
+//   const numeric = onlyNumbers(input.value)
+
+//   emit('update:modelValue', numeric)
+// }
+
+function onInput(value: string) {
+  const numeric = onlyNumbers(value)
   emit('update:modelValue', numeric)
-
-  await nextTick()
 }
 </script>
 
 <template>
-  <Input
-    :value="maskedValue"
-    :placeholder="placeholder"
-    inputmode="numeric"
-    autocomplete="off"
-    @input="onInput"
-  />
+  <div :class="['gap-2', horizontal ? 'flex items-center gap-x-4' : 'flex flex-col space-y-1.5']">
+    <!-- Label -->
+    <Label v-if="label" :for="inputId" :class="horizontal ? 'min-w-[140px] text-right' : ''">
+      {{ label }}
+    </Label>
+
+    <!-- Input -->
+    <div class="flex-1">
+      <Input
+        :id="inputId"
+        :model-value="maskedValue"
+        :placeholder="placeholder"
+        inputmode="numeric"
+        autocomplete="off"
+        :disabled="disabled"
+        @update:modelValue="onInput"
+      />
+    </div>
+  </div>
 </template>

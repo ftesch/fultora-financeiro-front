@@ -23,15 +23,14 @@
             'translate-x-0': sidebarOpen,
           }"
         >
-          <div class="px-3 py-2 text-lg font-semibold">Cadastros Master</div>
+          <div class="px-3 py-2 text-lg font-semibold">Dados Mestre</div>
 
           <nav class="mt-2">
-            <SidebarItem to="/" label="Home" :icon="Home" />
-            <SidebarItem to="/master/empresas" label="Empresas" :icon="Building2" />
+            <SidebarItem to="/master" label="Home" :icon="Home" />
+            <SidebarItem to="/master/company" label="Empresas" :icon="Building2" />
             <SidebarItem to="/master/user" label="Usuários" :icon="Users" />
-            <SidebarItem to="/master/fornecedores" label="Fornecedores" :icon="Truck" />
             <SidebarItem
-              to="/master/categorias-financeiras"
+              to="/master/financial_category"
               label="Categorias Financeiras"
               :icon="Tags"
             />

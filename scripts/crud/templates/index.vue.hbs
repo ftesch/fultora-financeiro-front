@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { Button, Table } from '@/components/ui'
+import { Button, PageContainer, Table } from '@/components/ui'
 import { onMounted } from 'vue'
 import { use{{className}}Store } from '../store'
 import { storeToRefs } from 'pinia'
@@ -27,12 +27,12 @@ const columns = [
 <template>
   <PageContainer title="{{className}}" :loading="loading">
     <template #actions>
-      <Button :icon="CirclePlus" variant="secondary" to="{{fullRoute}}/create" label="Novo" />
+      <Button :icon="CirclePlus" variant="secondary" to="/{{fullRoute}}/create" label="Novo" />
     </template>
 
     <Table :columns='columns' :data='items' has-actions density='compact' variant='elevated'>
       <template #actions='{ row }'>
-        <Button variant='secondary' :icon="Pencil" :to='`/{{fullRoute}}/${row.id}/edit`'>
+        <Button variant='secondary' :icon="Pencil" :to='`/{{fullRoute}}/${row.id}/edit`' />
       </template>
     </Table>
   </PageContainer>

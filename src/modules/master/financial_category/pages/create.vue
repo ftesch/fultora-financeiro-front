@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
-import {{className}}Form from '../components/{{className}}Form.vue'
-import { use{{className}}Store } from '../store'
+import FinancialCategoryForm from '../components/FinancialCategoryForm.vue'
+import { useFinancialCategoryStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import router from '@/router'
 
-const { storeData, resetItem } = use{{className}}Store()
-const { loading } = storeToRefs(use{{className}}Store())
+const { storeData, resetItem } = useFinancialCategoryStore()
+const { loading } = storeToRefs(useFinancialCategoryStore())
 
 async function submit() {
   await storeData()
-  router.push("/{{fullRoute}}")
+  router.push('/master/financial_category')
 }
 
 onMounted(() => {
@@ -20,20 +20,24 @@ onMounted(() => {
 })
 
 const activeTab = ref('basic')
-
 </script>
 
 <template>
   <PageContainer title="Novo Registro" :loading="loading">
     <template #actions>
-      <Button to="/{{fullRoute}}" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button
+        to="/master/financial_category"
+        variant="secondary"
+        :icon="ArrowLeft"
+        label="Voltar"
+      />
       <Button :icon="Save" @click="submit" />
     </template>
 
     <PageTabs v-model="activeTab">
       <PageTab name="basic" label="Básico" :icon="FileText">
-        <{{className}}Form @submit="submit" mode="create" />
+        <FinancialCategoryForm @submit="submit" mode="create" />
       </PageTab>
-    </PageTabs>    
+    </PageTabs>
   </PageContainer>
 </template>
