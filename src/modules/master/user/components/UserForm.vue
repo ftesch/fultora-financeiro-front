@@ -13,26 +13,14 @@ const form = computed(() => {
     item.value = {} as any
   }
 
-  return item.value
+  return item.value!
 })
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="$emit('submit', form)">
-    <Input label="Nome" v-model="form.name" placeholder="name" :disabled="loading" />
-    <Input label="Email" v-model="form.email" placeholder="email" :disabled="loading" />
-    <Input
-      label="Data da Criação"
-      v-model="form.created_at"
-      placeholder="created_at"
-      :disabled="loading"
-    />
-    <Input
-      label="Data de Atualizaçao"
-      v-model="form.updated_at"
-      placeholder="updated_at"
-      :disabled="loading"
-    />
+  <form class="space-y-4 bg-secondary/40 p-4 rounded-xl" @submit.prevent="$emit('submit', form)">
+    <Input label="Nome" v-model="form.name" :horizontal="true" :disabled="loading" />
+    <Input label="Email" v-model="form.email" :horizontal="true" :disabled="loading" />
 
     <Button type="submit" :loading="loading"> Salvar </Button>
   </form>

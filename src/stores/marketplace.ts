@@ -4,7 +4,7 @@ import type { Modules, Plans, PurchasePlan } from '@/types/marketplace'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
-import { useCompanyStore } from './company'
+import router from '@/router'
 
 export const useMarketplaceStore = defineStore('marketplace', () => {
   const modules = ref<Modules[]>([])
@@ -36,6 +36,8 @@ export const useMarketplaceStore = defineStore('marketplace', () => {
       toast(data.data)
     } catch (error: any) {
       handleError(error?.response)
+
+      router.push('/app')
 
       throw error
     } finally {

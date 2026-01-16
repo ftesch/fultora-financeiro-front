@@ -20,6 +20,8 @@ import MasterLayout from '@/components/layout/MasterLayout.vue'
 import { userRoutes } from '@/modules/master/user/routes'
 import { companyRoutes } from '@/modules/master/company/routes'
 import { FinancialCategoryRoutes } from '@/modules/master/financial_category/routes'
+import ResetPassword from '@/pages/auth/ResetPassword.vue'
+import ForgotPassord from '@/pages/auth/ForgotPassord.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -38,6 +40,16 @@ const routes: RouteRecordRaw[] = [
         path: 'register',
         name: 'register',
         component: Register,
+      },
+      {
+        path: 'reset-password',
+        name: 'reset-password',
+        component: ResetPassword,
+      },
+      {
+        path: 'forgot-password',
+        name: 'forgot-password',
+        component: ForgotPassord,
       },
     ],
   },

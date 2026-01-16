@@ -4,6 +4,8 @@ import { onMounted } from 'vue'
 import { useCompanyStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { CirclePlus, Pencil } from 'lucide-vue-next'
+import { Badge } from '@/components/ui'
+import { getTypeEntityLabel } from '../types'
 
 const { fetchData } = useCompanyStore()
 const { items, loading } = storeToRefs(useCompanyStore())
@@ -21,16 +23,23 @@ const columns = [
     key: 'name',
     label: 'Nome',
   },
+  {
+    key: 'type_entity',
+    label: 'Entidade',
+  },
 ]
 </script>
 
 <template>
-  <PageContainer title="Empresas | Fornecedores | Clientes" :loading="loading">
+  <PageContainer title="Pessoas" :loading="loading">
     <template #actions>
       <Button :icon="CirclePlus" variant="secondary" to="/master/company/create" label="Novo" />
     </template>
 
     <Table :columns="columns" :data="items" has-actions density="compact" variant="elevated">
+      <template #cell:type_entity="{ row }">
+        <Badge variant="secondary">{{ getTypeEntityLabel(row.type_entity) }}</Badge>
+      </template>
       <template #actions="{ row }">
         <Button variant="secondary" :icon="Pencil" :to="`/master/company/${row.id}/edit`" />
       </template>

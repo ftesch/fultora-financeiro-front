@@ -3,22 +3,23 @@ import { ref, computed } from 'vue'
 import api from '@/services/api'
 import router from '@/router'
 
-import type { User, LoginCredentials, Company, LoginResponse } from '@/types/auth'
+import type { User, LoginCredentials, LoginResponse, Licensor } from '@/types/auth'
 import { handleError } from '@/utils/helpers'
 import type { ApiResponse } from '@/types/common'
 import { useModulesStore } from './module'
+import { toast } from 'vue-sonner'
 
 export const useAuthStore = defineStore('auth', () => {
   /* ===============================
    * STATE
    * =============================== */
   const user = ref<User | null>(null)
-  const company = ref<Company | null>(null)
+  const licensor = ref<Licensor | null>(null)
   const token = ref<string | null>(localStorage.getItem('auth_token'))
   const loading = ref(false)
 
   const isAuthenticated = computed(() => !!user.value)
-  const plans = computed(() => company.value?.plans)
+  const plans = computed(() => licensor.value?.plans)
 
   const getModules = computed(() => {
     return user.value?.modules
@@ -47,7 +48,7 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await api.post<ApiResponse<LoginResponse>>('/api/login', credentials)
 
       user.value = data.data.user
-      company.value = data.data.company
+      licensor.value = data.data.licensor
       token.value = data.data.token ?? null
 
       if (data.data.token) {
@@ -96,21 +97,21 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await api.get<ApiResponse<LoginResponse>>('/api/user')
       user.value = data.data.user
-      company.value = data.data.company
+      licensor.value = data.data.licensor
 
       const { setModules } = useModulesStore()
       setModules(user.value.modules)
     } catch {
       user.value = null
-      company.value = null
+      licensor.value = null
       token.value = null
     } finally {
       loading.value = false
     }
   }
 
-  function setCompany(payload: Company) {
-    company.value = payload
+  function setLicensor(payload: Licensor) {
+    licensor.value = payload
   }
 
   const initAuth = async () => {
@@ -123,14 +124,14 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await api.get<ApiResponse<LoginResponse>>('/api/user')
       user.value = data.data.user
-      company.value = data.data.company
+      licensor.value = data.data.licensor
 
       const { setModules } = useModulesStore()
       setModules(user.value.modules)
     } catch {
       // token inválido / expirado
       user.value = null
-      company.value = null
+      licensor.value = null
       token.value = null
       localStorage.removeItem('auth_token')
     }
@@ -166,10 +167,50 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const resetPassword = async (payload: {
+    token: string
+    email: string
+    password: string
+    password_confirmation: string
+  }) => {
+    loading.value = true
+
+    try {
+      await getCsrfCookie()
+
+      const { data } = await api.post('/api/reset-password', payload)
+      toast(data.message)
+    } catch (error: any) {
+      handleError(error?.response)
+
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const forgotPassword = async (payload: { email: string }) => {
+    loading.value = true
+
+    try {
+      await getCsrfCookie()
+
+      const { data } = await api.post('/api/forgot-password', payload)
+
+      toast.success(data.message)
+    } catch (error: any) {
+      handleError(error?.response)
+
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     // state
     user,
-    company,
+    licensor,
     token,
     loading,
     isAuthenticated,
@@ -182,6 +223,8 @@ export const useAuthStore = defineStore('auth', () => {
     initAuth,
     register,
     getModules,
-    setCompany,
+    setLicensor,
+    resetPassword,
+    forgotPassword,
   }
 })

@@ -13,11 +13,13 @@ import router from '@/router'
 import { storeToRefs } from 'pinia'
 import ModuleCard from '@/components/App/ModuleCard.vue'
 import { useModulesStore } from '@/stores/module'
+import { useAuthStore } from '@/stores/auth'
 
 const { modules } = storeToRefs(useModulesStore())
+const { licensor } = storeToRefs(useAuthStore())
 
 onMounted(() => {
-  if (modules.value?.length == 1) {
+  if (licensor.value == null || licensor.value?.plans.length == 0) {
     router.push({ name: 'marketplace' })
   }
 })

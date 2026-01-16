@@ -52,6 +52,20 @@ const form = computed(() => {
         { label: 'Jurídica', value: 'J' },
       ]"
     />
+
+    <AppSelect
+      v-model="form.type_entity"
+      label="Tipo da Entidade"
+      :disabled="loading || isEdit"
+      :horizontal="true"
+      :options="[
+        { label: 'Grupo Empresarial', value: 'business_group' },
+        { label: 'Fornecedor ou Cliente', value: 'partner' },
+        { label: 'Colaborador', value: 'employee' },
+        { label: 'Licenciamento', value: 'licensor' },
+      ]"
+    />
+
     <Input
       v-model="form.name"
       :horizontal="true"

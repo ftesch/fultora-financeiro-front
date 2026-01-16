@@ -8,12 +8,30 @@ export interface Updated {
   name: string
 }
 
+export interface Account {
+  id: string
+  type: string
+  banco: string | null
+  agencia: string | null
+  conta: string | null
+  digito_conta: string | null
+  principal: boolean
+  active: boolean
+}
+
+export interface Group {
+  id: string
+  codigo: string
+  apelido: string
+}
+
 export interface Company {
   id?: number
   name: string
   email: string
   phone: string
   type_person: string
+  type_entity: string
   active: boolean
   id_fiscal: string
   endereco: string
@@ -26,4 +44,26 @@ export interface Company {
   id_ibge: number
   created?: Created
   updated?: Updated
+  accounts?: Account[]
+  group?: Group
+}
+
+export enum TypeEntity {
+  Partner = 'partner',
+  BusinessGroup = 'business_group',
+  Employee = 'employee',
+  Licensor = 'licensor',
+}
+
+export const TypeEntityLabel: Record<TypeEntity, string> = {
+  [TypeEntity.BusinessGroup]: 'Grupo Empresarial',
+  [TypeEntity.Employee]: 'Colaborador',
+  [TypeEntity.Partner]: 'Fornecedor/Cliente',
+  [TypeEntity.Licensor]: 'Licenciamento',
+}
+
+export function getTypeEntityLabel(value?: TypeEntity | string | null): string {
+  if (!value) return ''
+
+  return TypeEntityLabel[value as TypeEntity] ?? value
 }

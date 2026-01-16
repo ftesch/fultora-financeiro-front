@@ -3,7 +3,7 @@ import { Button, PageContainer } from '@/components/ui'
 import UserForm from '../components/UserForm.vue'
 import { useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft } from 'lucide-vue-next'
+import { ArrowLeft, Save } from 'lucide-vue-next'
 import { onMounted } from 'vue'
 import router from '@/router'
 
@@ -24,6 +24,7 @@ onMounted(() => {
   <PageContainer title="Novo Usuario" :loading="loading">
     <template #actions>
       <Button to="/master/user" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button :icon="Save" @click="submit" />
     </template>
     <UserForm @submit="submit" />
   </PageContainer>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCompanyStore } from '@/stores/company'
+import { useLicensorStore } from '@/stores/licensor'
 
 // UI (via components/index.ts)
 import { Dialog, Card, Input, Label, Switch, MasketInput, Button } from '@/components/ui'
@@ -15,10 +15,11 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
+  (e: 'confirm'): void
 }>()
 
-const { company, loading } = storeToRefs(useCompanyStore())
-const { resetCompany, storeCompany, searchCEP } = useCompanyStore()
+const { licensor, loading } = storeToRefs(useLicensorStore())
+const { resetCompany, storeCompany, searchCEP } = useLicensorStore()
 
 function close() {
   emit('update:open', false)
@@ -27,7 +28,8 @@ function close() {
 
 async function save() {
   await storeCompany()
-  close()
+  emit('confirm')
+  emit('update:open', false)
 }
 </script>
 
@@ -42,7 +44,7 @@ async function save() {
     @confirm="save"
     @cancel="close"
     @update:open="emit('update:open', $event)"
-    density="compact"
+    size="medium"
   >
     <Card density="compact">
       <!-- 🔹 Conteúdo (denso, sem CardContent) -->
@@ -50,13 +52,13 @@ async function save() {
         <!-- Documento -->
         <div class="md:col-span-2 space-y-1">
           <Label class="text-sm">CPF / CNPJ</Label>
-          <MasketInput v-model="company.id_fiscal" mask="cpf-cnpj" />
+          <MasketInput v-model="licensor.id_fiscal" mask="cpf-cnpj" />
         </div>
 
         <!-- Tipo -->
         <div class="space-y-1">
           <Label class="text-sm">Tipo</Label>
-          <Select v-model="company.type_person">
+          <Select v-model="licensor.type_person">
             <SelectTrigger>
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
@@ -70,42 +72,23 @@ async function save() {
         <!-- Nome -->
         <div class="md:col-span-3 space-y-1">
           <Label class="text-sm">Nome</Label>
-          <Input v-model="company.name" />
+          <Input v-model="licensor.name" />
         </div>
 
         <!-- Email -->
         <div class="md:col-span-2 space-y-1">
           <Label class="text-sm">Email</Label>
-          <Input v-model="company.email" />
+          <Input v-model="licensor.email" />
         </div>
 
         <!-- Telefone -->
         <div class="space-y-1">
           <Label class="text-sm">Telefone</Label>
-          <MasketInput mask="phone" v-model="company.phone" />
+          <MasketInput mask="phone" v-model="licensor.phone" />
         </div>
 
-        <!-- Flags -->
-        <!-- <div class="flex items-center gap-4 pt-5">
-          <div class="flex items-center gap-2">
-            <Switch
-              :checked="company.active === '1'"
-              @update:checked="(v) => (company.active = v ? '1' : '0')"
-            />
-            <Label class="text-sm">Ativa</Label>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <Switch
-              :checked="company.principal === '1'"
-              @update:checked="(v) => (company.principal = v ? '1' : '0')"
-            />
-            <Label class="text-sm">Principal</Label>
-          </div>
-        </div> -->
-
         <div class="space-y-1">
-          <Input v-model="company.cep" label="CEP" inputmode="numeric">
+          <Input v-model="licensor.cep" label="CEP" inputmode="numeric">
             <template #suffix>
               <Button size="icon" variant="ghost" @click="searchCEP">
                 <Search class="h-4 w-4" />
@@ -117,37 +100,37 @@ async function save() {
         <!-- Endereço -->
         <div class="md:col-span-2 space-y-1">
           <Label class="text-sm font-medium">Endereço</Label>
-          <Input v-model="company.endereco" placeholder="Rua, avenida..." />
+          <Input v-model="licensor.endereco" placeholder="Rua, avenida..." />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">Número</Label>
-          <Input v-model="company.numero" />
+          <Input v-model="licensor.numero" />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">Complemento</Label>
-          <Input v-model="company.complemento" />
+          <Input v-model="licensor.complemento" />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">Bairro</Label>
-          <Input v-model="company.bairro" />
+          <Input v-model="licensor.bairro" />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">Cidade</Label>
-          <Input v-model="company.cidade" />
+          <Input v-model="licensor.cidade" />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">Estado</Label>
-          <Input v-model="company.estado" />
+          <Input v-model="licensor.estado" />
         </div>
 
         <div class="space-y-1">
           <Label class="text-sm">IBGE</Label>
-          <Input v-model="company.id_ibge" />
+          <Input v-model="licensor.id_ibge" />
         </div>
       </div>
     </Card>

@@ -6,6 +6,8 @@ import type { ApiResponse } from '@/types/common'
 import { handleError } from '@/utils/helpers'
 import { toast } from 'vue-sonner'
 
+const APIRoute = '/api/master/user'
+
 export const useUserStore = defineStore('user', () => {
   const loading = ref(false)
   const items = ref<User[]>([])
@@ -15,7 +17,7 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true
 
     try {
-      const { data } = await api.get<ApiResponse<User[]>>('/api/master/user')
+      const { data } = await api.get<ApiResponse<User[]>>(`${APIRoute}`)
 
       items.value = data.data
     } catch (error: any) {
@@ -29,7 +31,7 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true
 
     try {
-      const { data } = await api.post<ApiResponse<User>>('/api/master/user', item.value)
+      const { data } = await api.post<ApiResponse<User>>(`${APIRoute}`, item.value)
 
       item.value = data.data
       items.value.push(data.data)
@@ -50,10 +52,7 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true
 
     try {
-      const { data } = await api.put<ApiResponse<User>>(
-        `/api/master/user/${item.value?.id}`,
-        item.value,
-      )
+      const { data } = await api.put<ApiResponse<User>>(`${APIRoute}/${item.value?.id}`, item.value)
 
       item.value = data.data
       toast.success(data.message ?? 'Usuario Atualizado')
@@ -77,6 +76,9 @@ export const useUserStore = defineStore('user', () => {
       if (found) {
         item.value = { ...found }
         return item.value
+      } else {
+        const { data } = await api.get<ApiResponse<User>>(`${APIRoute}/${id}`)
+        item.value = data.data
       }
 
       return null
@@ -101,6 +103,12 @@ export const useUserStore = defineStore('user', () => {
     item.value = createEmptyItem()
   }
 
+  async function resetPassword() {
+    await api.post(`/api/forgot-password`, {
+      email: item.value?.email,
+    })
+  }
+
   return {
     resetItem,
     loading,
@@ -110,5 +118,6 @@ export const useUserStore = defineStore('user', () => {
     fetchData,
     storeData,
     updateData,
+    resetPassword,
   }
 })

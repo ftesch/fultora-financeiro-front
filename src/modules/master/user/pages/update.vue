@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { Button, PageContainer } from '@/components/ui'
+import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import UserForm from '../components/UserForm.vue'
 import { useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft } from 'lucide-vue-next'
-import { onMounted } from 'vue'
+import { ArrowLeft, FileText, Info, RotateCcw, Save } from 'lucide-vue-next'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
+import UserFormInfo from '../components/UserFormInfo.vue'
 
-const { updateData, findById } = useUserStore()
+const { updateData, findById, resetPassword } = useUserStore()
 const { loading, item } = storeToRefs(useUserStore())
 const route = useRoute()
 
@@ -21,14 +22,25 @@ onMounted(async () => {
   const id = route.params.id as string
   await findById(id)
 })
+
+const activeTab = ref('basic')
 </script>
 
 <template>
   <PageContainer title="Alterar Usuario" :loading="loading">
     <template #actions>
       <Button to="/master/user" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button :icon="RotateCcw" @click="resetPassword" />
+      <Button :icon="Save" @click="submit" />
     </template>
 
-    <UserForm :model-value="item" @submit="submit" />
+    <PageTabs v-model="activeTab">
+      <PageTab name="basic" label="Básico" :icon="FileText">
+        <UserForm :model-value="item" @submit="submit" />
+      </PageTab>
+      <PageTab name="info" label="Informações" :icon="Info">
+        <UserFormInfo />
+      </PageTab>
+    </PageTabs>
   </PageContainer>
 </template>

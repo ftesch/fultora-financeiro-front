@@ -32,7 +32,7 @@ export interface Plans {
   companies_limit: number
 }
 
-export interface Company {
+export interface Licensor {
   name: string
   id_fiscal: string
   plans: Plans[]
@@ -40,6 +40,6 @@ export interface Company {
 
 export interface LoginResponse {
   user: User
-  company: Company
+  licensor: Licensor
   token: string
 }

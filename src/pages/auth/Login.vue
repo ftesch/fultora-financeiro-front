@@ -37,65 +37,33 @@ const submit = async () => {
     }
 
     await login({ email: form.email, password: form.password })
-
   } finally {
   }
 }
 </script>
 
 <template>
-  <div
-    class="flex flex-1 items-center justify-center px-4"
-  >
+  <div class="flex flex-1 items-center justify-center px-4">
     <Card class="w-full max-w-md">
       <!-- Header -->
       <template #header>
         <div class="space-y-1">
-          <h1 class="text-2xl font-semibold tracking-tight">
-            Entrar
-          </h1>
-          <p class="text-sm text-muted-foreground">
-            Acesse sua conta para continuar
-          </p>
+          <h1 class="text-2xl font-semibold tracking-tight">Entrar</h1>
+          <p class="text-sm text-muted-foreground">Acesse sua conta para continuar</p>
         </div>
       </template>
 
       <!-- Form -->
       <form class="space-y-4" @submit.prevent="submit">
-        <AppFormField
-          label="E-mail"
-          required
-          for="email"
-          :error="errors.email"
-        >
-          <Input
-            id="email"
-            v-model="form.email"
-            type="email"
-            placeholder="seu@email.com"
-          />
+        <AppFormField label="E-mail" required for="email" :error="errors.email">
+          <Input id="email" v-model="form.email" type="email" placeholder="seu@email.com" />
         </AppFormField>
 
-        <AppFormField
-          label="Senha"
-          required
-          for="password"
-          :error="errors.password"
-        >
-          <Input
-            id="password"
-            v-model="form.password"
-            type="password"
-            placeholder=""
-          />
+        <AppFormField label="Senha" required for="password" :error="errors.password">
+          <Input id="password" v-model="form.password" type="password" placeholder="" />
         </AppFormField>
 
-        <Button
-          type="submit"
-          class="w-full"
-          :loading="loading"
-          :disabled="loading"
-        >
+        <Button type="submit" class="w-full" :loading="loading" :disabled="loading">
           Entrar
         </Button>
       </form>
@@ -103,19 +71,11 @@ const submit = async () => {
       <!-- Footer -->
       <template #footer>
         <div class="flex items-center justify-between text-sm">
-          <a
-            href="#"
-            class="text-muted-foreground hover:text-primary transition"
-          >
+          <a href="/forgot-password" class="text-muted-foreground hover:text-primary transition">
             Esqueci minha senha
           </a>
 
-          <a
-            href="/register"
-            class="font-medium text-primary hover:underline"
-          >
-            Criar conta
-          </a>
+          <a href="/register" class="font-medium text-primary hover:underline"> Criar conta </a>
         </div>
       </template>
     </Card>

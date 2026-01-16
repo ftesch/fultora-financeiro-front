@@ -92,7 +92,7 @@ function selectItem(item: any) {
   </AppInput>
 
   <!-- Dialog -->
-  <AppDialog v-model="open" title="Selecionar registro" size="large">
+  <AppDialog :open="open" title="Selecionar registro" size="large">
     <div v-if="loading" class="text-sm text-muted-foreground">Carregando...</div>
 
     <table v-else class="w-full text-sm border-collapse">

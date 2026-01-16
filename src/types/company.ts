@@ -1,27 +1,26 @@
-export interface Company {
-  id?: string | null
-  name: string | null
-  email: string | null
-  phone: string | null
-  type_person: string | null
-  active?: string | null
-  principal?: string | null
-  id_fiscal: string | null
-  endereco: string | null
-  numero: string | null
-  complemento: string | null
-  bairro: string | null
-  cidade: string | null
-  estado: string | null
-  cep: string | null
-  id_ibge: string | null
-  created_by: string | null
-  updated_by?: string | null
+export interface Licensor {
+  id?: string
+  name: string
+  email: string
+  phone: string
+  type_person: string
+  active?: string
+  principal?: string
+  id_fiscal: string
+  endereco: string
+  numero: string
+  complemento: string
+  bairro: string
+  cidade: string
+  estado: string
+  cep: string
+  id_ibge: string
+  created_by: string
+  updated_by?: string
 }
 
-export function createEmptyCompany(): Company {
+export function createEmptyCompany(): Licensor {
   return {
-    id: null,
     name: '',
     email: '',
     phone: '',
@@ -37,7 +36,6 @@ export function createEmptyCompany(): Company {
     estado: '',
     cep: '',
     id_ibge: '',
-    created_by: null,
-    updated_by: null,
+    created_by: '',
   }
 }

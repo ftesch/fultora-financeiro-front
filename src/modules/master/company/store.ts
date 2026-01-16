@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Company } from './types'
+import type { Company, Group } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
@@ -64,6 +64,27 @@ export const useCompanyStore = defineStore('company', () => {
     }
   }
 
+  async function storeGroup() {
+    loading.value = true
+
+    try {
+      const { data } = await api.put<ApiResponse<Group>>(
+        `/api/master/group/${item.value?.group?.id}`,
+        item.value?.group,
+      )
+
+      item.value.group = data.data
+      toast.success(data.message ?? 'Usuario Atualizado')
+
+      return data.data
+    } catch (error: any) {
+      handleError(error?.response)
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
   async function findById(id: string) {
     loading.value = true
 
@@ -110,6 +131,14 @@ export const useCompanyStore = defineStore('company', () => {
     item.value = createEmptyItem()
   }
 
+  function resetGroup() {
+    item.value.group = {
+      id: '',
+      codigo: '',
+      apelido: '',
+    } as Group
+  }
+
   async function searchCEP() {
     loading.value = false
 
@@ -132,6 +161,7 @@ export const useCompanyStore = defineStore('company', () => {
 
   return {
     resetItem,
+    resetGroup,
     loading,
     items,
     item,
@@ -141,5 +171,6 @@ export const useCompanyStore = defineStore('company', () => {
     updateData,
     createEmptyItem,
     searchCEP,
+    storeGroup,
   }
 })

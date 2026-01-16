@@ -100,7 +100,7 @@ export const useFinancialCategoryStore = defineStore('FinancialCategory', () => 
       account: '',
       level: 0,
       financial_category_id: null,
-      financialParent: null,
+      financial_parent: null,
     }
   }
 

@@ -6,13 +6,13 @@
 
 <script setup lang="ts">
 import ProductCard from '@/components/marketplace/ProductCard.vue'
-import { useCompanyStore } from '@/stores/company'
+import { useLicensorStore } from '@/stores/licensor'
 import { useMarketplaceStore } from '@/stores/marketplace'
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 
 const { fetchModules } = useMarketplaceStore()
-const { fetchPrincipalCompany } = useCompanyStore()
+const { fetchPrincipalCompany } = useLicensorStore()
 
 const { loading, modules } = storeToRefs(useMarketplaceStore())
 

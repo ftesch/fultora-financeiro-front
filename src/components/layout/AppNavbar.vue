@@ -3,17 +3,18 @@
     <div class="flex h-14 items-center justify-between px-6">
       <!-- Esquerda: Nome do módulo -->
       <div class="flex items-center gap-2">
-        <!-- Botão hamburguer -->
+        <!-- Sidebar toggle (opcional) -->
         <button
-          class="lg:hidden inline-flex items-center justify-center p-2"
+          v-if="sidebar"
+          class="inline-flex items-center justify-center p-2"
           @click="$emit('toggle-sidebar')"
         >
-          <Menu class="h-5 w-5" />
+          <PanelLeftClose v-if="sidebar.open" class="h-5 w-5" />
+          <PanelLeftOpen v-else class="h-5 w-5" />
         </button>
 
-        <!-- Nome da empresa -->
         <h1 class="text-lg font-semibold leading-none">
-          {{ company?.name }}
+          {{ licensor?.name }}
         </h1>
       </div>
       <!-- Direita: ações -->
@@ -47,7 +48,7 @@
           <DropdownMenuTrigger as-child>
             <Button variant="ghost" class="flex items-center gap-2">
               <span class="text-sm font-medium">
-                {{ user.name }}
+                {{ user?.name }}
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -66,7 +67,8 @@
 </template>
 
 <script setup lang="ts">
-import { Sun, Moon, Menu, Home } from 'lucide-vue-next'
+import { Sun, Moon, Home, PanelLeftOpen, PanelLeftClose } from 'lucide-vue-next'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -75,28 +77,33 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
+
 import { useAuthStore } from '@/stores/auth'
-const { logout } = useAuthStore()
-
-const { user, company } = storeToRefs(useAuthStore())
-
-import { useTheme } from '@/composables/useTheme'
-import { storeToRefs } from 'pinia'
 import { useModulesStore } from '@/stores/module'
-import type { Module } from '@/types/auth'
+import { storeToRefs } from 'pinia'
+import { useTheme } from '@/composables/useTheme'
 import router from '@/router'
+import type { Module } from '@/types/auth'
 
-const { theme, toggleTheme } = useTheme()
-
-const { modules } = storeToRefs(useModulesStore())
+defineProps<{
+  sidebar?: {
+    open: boolean
+  }
+}>()
 
 defineEmits<{
   (e: 'toggle-sidebar'): void
 }>()
 
+const { logout } = useAuthStore()
+const { user, licensor } = storeToRefs(useAuthStore())
+const { modules } = storeToRefs(useModulesStore())
+const { theme, toggleTheme } = useTheme()
+
 const go = (module: Module) => {
   router.push(module.route)
 }
+
 const goToHome = () => {
   router.push('/app')
 }

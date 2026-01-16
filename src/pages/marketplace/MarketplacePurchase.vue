@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4" v-show="hasPrincipalCompany">{{ company.name }}</h1>
+    <h1 class="text-2xl font-bold mb-4" v-show="hasPrincipalCompany">{{ licensor.name }}</h1>
     <h1 class="text-xl font-bold mb-4">{{ purchaseProduct?.name }}</h1>
     <div class="flex justify-between">
       <span>
@@ -33,7 +33,7 @@
       </template>
     </Table>
 
-    <CompanyForm v-model:open="showCompanyForm" />
+    <CompanyForm v-model:open="showCompanyForm" @confirm="confirmCompany" />
 
     <div v-show="showByForm" class="mt-2">
       <Card density="compact">
@@ -85,12 +85,12 @@ import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
 import CompanyForm from '@/components/company/CompanyForm.vue'
-import { useCompanyStore } from '@/stores/company'
+import { useLicensorStore } from '@/stores/licensor'
 import { toast } from 'vue-sonner'
 
 const { purchaseProduct, purchasePlan } = storeToRefs(useMarketplaceStore())
 const { setPurchasePlan, buyPlan } = useMarketplaceStore()
-const { hasPrincipalCompany, company } = storeToRefs(useCompanyStore())
+const { hasPrincipalCompany, licensor } = storeToRefs(useLicensorStore())
 
 const route = useRoute()
 const productId = route.params.id as string
@@ -115,13 +115,19 @@ const quantity = computed<number>({
 })
 
 const handlePurchaseProduct = (plan: any) => {
+  setPurchasePlan(plan)
   if (!hasPrincipalCompany.value) {
     toast('Antes de realizar a compra faça o cadastro da empresa principal')
     showCompanyForm.value = true
   } else {
     toast('Defina uma quantidade e confirme')
     showByForm.value = true
-    setPurchasePlan(plan)
   }
+}
+
+const confirmCompany = () => {
+  showCompanyForm.value = true
+  showByForm.value = true
+  toast('Defina uma quantidade e confirme')
 }
 </script>
