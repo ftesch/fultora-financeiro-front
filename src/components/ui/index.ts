@@ -65,7 +65,8 @@ export {
 } from './select'
 
 export { Textarea } from './textarea'
-export { Switch } from './switch'
+export { default as Switch } from '@/components/common/AppSwitch.vue'
+//export { Switch } from './switch'
 
 // ==========================
 // Dialogs

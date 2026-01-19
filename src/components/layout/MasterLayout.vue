@@ -32,6 +32,11 @@
                 label="Categorias Financeiras"
                 :icon="Tags"
               />
+              <SidebarItem
+                to="/master/sales_payment_method"
+                label="Metodos de Pagamento"
+                :icon="Banknote"
+              />
             </nav>
           </div>
         </aside>
@@ -51,7 +56,7 @@ import { ref } from 'vue'
 import AppNavbar from '@/components/layout/AppNavbar.vue'
 import SidebarItem from '@/components/layout/components/SidebarItem.vue'
 
-import { Home, Building2, Users, Truck, Tags } from 'lucide-vue-next'
+import { Home, Building2, Users, Truck, Tags, Banknote } from 'lucide-vue-next'
 
 const sidebarOpen = ref(false)
 

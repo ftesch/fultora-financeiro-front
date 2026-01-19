@@ -22,6 +22,7 @@ import { companyRoutes } from '@/modules/master/company/routes'
 import { FinancialCategoryRoutes } from '@/modules/master/financial_category/routes'
 import ResetPassword from '@/pages/auth/ResetPassword.vue'
 import ForgotPassord from '@/pages/auth/ForgotPassord.vue'
+import { salesPaymentMethodRoutes } from '@/modules/master/sales_payment_method/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -40,16 +41,25 @@ const routes: RouteRecordRaw[] = [
         path: 'register',
         name: 'register',
         component: Register,
+        meta: {
+          title: 'Registrar',
+        },
       },
       {
         path: 'reset-password',
         name: 'reset-password',
         component: ResetPassword,
+        meta: {
+          title: 'Reset de Senha',
+        },
       },
       {
         path: 'forgot-password',
         name: 'forgot-password',
         component: ForgotPassord,
+        meta: {
+          title: 'Recuperar Senha',
+        },
       },
     ],
   },
@@ -70,11 +80,17 @@ const routes: RouteRecordRaw[] = [
         path: 'marketplace',
         name: 'marketplace',
         component: Marketplace,
+        meta: {
+          title: 'Marketplace',
+        },
       },
       {
         path: 'MarketplacePurchase/:id',
         name: 'MarketplacePurchase',
         component: MarketplacePurchase,
+        meta: {
+          title: 'Marketplace',
+        },
       },
     ],
   },
@@ -94,10 +110,14 @@ const routes: RouteRecordRaw[] = [
         path: 'home',
         name: 'master.home',
         component: Master,
+        meta: {
+          title: 'Master',
+        },
       },
       ...userRoutes,
       ...companyRoutes,
       ...FinancialCategoryRoutes,
+      ...salesPaymentMethodRoutes,
     ],
   },
   // fallback
@@ -116,6 +136,12 @@ const router = createRouter({
 /**
  * Global Guard
  */
+
+router.afterEach((to) => {
+  const defaultTitle = 'Fultora Core'
+  document.title = to.meta.title ? `${to.meta.title} | ${defaultTitle}` : defaultTitle
+})
+
 router.beforeEach((to) => {
   const authStore = useAuthStore()
 

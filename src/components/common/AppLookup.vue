@@ -73,6 +73,13 @@ function selectItem(item: any) {
 
   open.value = false
 }
+
+function handleClose() {
+  emit('update:modelValue', null)
+  emit('update:object', null)
+
+  open.value = false
+}
 </script>
 
 <template>
@@ -92,7 +99,7 @@ function selectItem(item: any) {
   </AppInput>
 
   <!-- Dialog -->
-  <AppDialog :open="open" title="Selecionar registro" size="large">
+  <AppDialog :open="open" title="Selecionar registro" size="large" @cancel="handleClose">
     <div v-if="loading" class="text-sm text-muted-foreground">Carregando...</div>
 
     <table v-else class="w-full text-sm border-collapse">
