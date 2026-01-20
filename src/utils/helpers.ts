@@ -26,3 +26,34 @@ export const handleError = (response: any | null) => {
     showErrorToast('Erro', 'Houve uma falha geral.')
   }
 }
+
+export function formatCurrency(value: number | string | null | undefined): string {
+  if (value === null || value === undefined || value === '') {
+    return '0,00'
+  }
+
+  const numberValue = typeof value === 'string' ? Number(value.replace(',', '.')) : value
+
+  if (Number.isNaN(numberValue)) {
+    return '0,00'
+  }
+
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(numberValue)
+}
+
+export function formatDateTimeBR(value: Date | string | number | null | undefined): string {
+  if (!value) return ''
+
+  const date = value instanceof Date ? value : new Date(value)
+
+  if (Number.isNaN(date.getTime())) return ''
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(date)
+}

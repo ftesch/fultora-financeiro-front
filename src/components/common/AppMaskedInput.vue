@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick } from 'vue'
+import { computed } from 'vue'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/ui'
 
 type MaskType = 'cpf' | 'cnpj' | 'cpf-cnpj' | 'phone'
 
@@ -108,7 +108,12 @@ function onInput(value: string) {
 <template>
   <div :class="['gap-2', horizontal ? 'flex items-center gap-x-4' : 'flex flex-col space-y-1.5']">
     <!-- Label -->
-    <Label v-if="label" :for="inputId" :class="horizontal ? 'min-w-[140px] text-right' : ''">
+    <Label
+      v-if="label"
+      :for="inputId"
+      :class="horizontal ? 'min-w-[140px] text-right' : ''"
+      :right="horizontal"
+    >
       {{ label }}
     </Label>
 

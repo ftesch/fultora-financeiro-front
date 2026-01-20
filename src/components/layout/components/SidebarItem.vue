@@ -1,9 +1,9 @@
 <template>
   <RouterLink
     :to="to"
-    class="flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+    class="flex items-center rounded-md px-2 py-2 mt-1 mr-2 text-sm font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
     :class="{
-      'bg-sidebar-accent text-sidebar-accent-foreground': isActive,
+      'bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-l-green-500': isActive,
     }"
   >
     <!-- Ícone (opcional) -->
@@ -27,5 +27,5 @@ const props = defineProps<{
 
 const route = useRoute()
 
-const isActive = computed(() => route.path === props.to)
+const isActive = computed(() => route.path.startsWith(props.to))
 </script>

@@ -120,7 +120,7 @@ function onBlur() {
 <template>
   <div :class="['gap-2', horizontal ? 'flex items-center gap-x-4' : 'flex flex-col space-y-1.5']">
     <!-- Label -->
-    <Label v-if="label" :class="horizontal ? 'min-w-[140px] text-right' : ''">
+    <Label v-if="label" :class="horizontal ? 'min-w-[140px] text-right' : ''" :right="horizontal">
       {{ label }}
     </Label>
 

@@ -3,9 +3,10 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import SalesPaymentMethodForm from '../components/SalesPaymentMethodForm.vue'
 import { useSalesPaymentMethodStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
+import { ArrowLeft, FileText, Info, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import SalesPaymentMethodInfo from '../components/SalesPaymentMethodInfo.vue'
 
 const { updateData, findById } = useSalesPaymentMethodStore()
 const { loading, item } = storeToRefs(useSalesPaymentMethodStore())
@@ -38,6 +39,9 @@ const activeTab = ref('basic')
     <PageTabs v-model="activeTab">
       <PageTab name="basic" label="Básico" :icon="FileText">
         <SalesPaymentMethodForm :model-value="item" @submit="submit" mode="edit" />
+      </PageTab>
+      <PageTab name="informacoes" label="Informações" :icon="Info">
+        <SalesPaymentMethodInfo />
       </PageTab>
     </PageTabs>
   </PageContainer>

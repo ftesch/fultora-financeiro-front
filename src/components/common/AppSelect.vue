@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/ui'
 
 import {
   Select,
@@ -39,7 +39,12 @@ const model = computed({
 <template>
   <div :class="[horizontal ? 'flex items-center gap-x-4' : 'flex flex-col space-y-1.5']">
     <!-- Label -->
-    <Label v-if="label" :for="inputId" :class="horizontal ? 'min-w-[140px] text-right' : ''">
+    <Label
+      v-if="label"
+      :for="inputId"
+      :class="horizontal ? 'min-w-[140px] text-right' : ''"
+      :right="horizontal"
+    >
       {{ label }}
     </Label>
 

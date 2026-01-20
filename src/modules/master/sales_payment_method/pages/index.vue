@@ -4,6 +4,7 @@ import { onMounted } from 'vue'
 import { useSalesPaymentMethodStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { CirclePlus, Pencil } from 'lucide-vue-next'
+import { getPaymentMethodColor, getPaymentMethodLabel } from '../types'
 
 const { fetchData } = useSalesPaymentMethodStore()
 const { items, loading } = storeToRefs(useSalesPaymentMethodStore())
@@ -48,6 +49,11 @@ const columns = [
     </template>
 
     <Table :columns="columns" :data="items" has-actions density="compact" variant="elevated">
+      <template #cell:payment_method="{ row }">
+        <Badge :class="getPaymentMethodColor(row.payment_method)">{{
+          getPaymentMethodLabel(row.payment_method)
+        }}</Badge>
+      </template>
       <template #cell:category="{ row }">
         {{ `${row.category.account} - ${row.category.name}` }}
       </template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Input } from '@/components/ui'
-import { useFinancialCategoryStore } from '../store'
+import { useSalesPaymentMethodStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { formatDateTimeBR } from '@/utils/helpers'
 
-const { item } = storeToRefs(useFinancialCategoryStore())
+const { item } = storeToRefs(useSalesPaymentMethodStore())
 </script>
 
 <template>

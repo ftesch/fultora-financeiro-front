@@ -64,50 +64,53 @@ const form = computed(() => {
       ]"
     />
 
-    <AppSelect
-      v-model="form.payment_method"
-      label="Método"
-      :disabled="loading"
-      :horizontal="true"
-      :options="[
-        { label: 'Dinheiro', value: 'dinheiro' },
-        { label: 'Cartão Debito', value: 'cartao_debito' },
-        { label: 'Cartão Credito', value: 'cartao_credito' },
-        { label: 'Carteira Digital', value: 'carteira_digital' },
-        { label: 'Pix', value: 'pix' },
-        { label: 'Boleto', value: 'boleto' },
-        { label: 'Devolução', value: 'devolucao' },
-        { label: 'Convênio', value: 'convenio' },
-      ]"
-    />
-    <AppSelect
-      v-model="form.payment_term_options"
-      label="Dias Recebimento"
-      :disabled="loading"
-      :horizontal="true"
-      :options="[
-        { label: 'Dias Úteis', value: 'diasuteis' },
-        { label: 'Dias Corridos', value: 'diascorridos' },
-        { label: 'Dia do Mês', value: 'diadomes' },
-      ]"
-    />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <AppSelect
+        v-model="form.payment_method"
+        label="Método"
+        :disabled="loading"
+        :horizontal="true"
+        :options="[
+          { label: 'Dinheiro', value: 'dinheiro' },
+          { label: 'Cartão Debito', value: 'cartao_debito' },
+          { label: 'Cartão Credito', value: 'cartao_credito' },
+          { label: 'Carteira Digital', value: 'carteira_digital' },
+          { label: 'Pix', value: 'pix' },
+          { label: 'Boleto', value: 'boleto' },
+          { label: 'Devolução', value: 'devolucao' },
+          { label: 'Convênio', value: 'convenio' },
+        ]"
+      />
+      <AppSelect
+        v-model="form.payment_term_options"
+        label="Dias Recebimento"
+        :disabled="loading"
+        :horizontal="true"
+        :options="[
+          { label: 'Dias Úteis', value: 'diasuteis' },
+          { label: 'Dias Corridos', value: 'diascorridos' },
+          { label: 'Dia do Mês', value: 'diadomes' },
+        ]"
+      />
+    </div>
 
-    <AppInputNumber
-      label="Dias"
-      :horizontal="true"
-      v-model="form.payment_term_days"
-      :decimals="0"
-      :disabled="loading"
-    />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <AppInputNumber
+        label="Dias"
+        :horizontal="true"
+        v-model="form.payment_term_days"
+        :decimals="0"
+        :disabled="loading"
+      />
 
-    <AppInputNumber
-      label="Taxa"
-      :horizontal="true"
-      v-model="form.payment_tax"
-      :decimals="2"
-      :disabled="loading"
-    />
-
+      <AppInputNumber
+        label="Taxa"
+        :horizontal="true"
+        v-model="form.payment_tax"
+        :decimals="2"
+        :disabled="loading"
+      />
+    </div>
     <AppSwitch
       label="Ativo"
       :horizontal="true"

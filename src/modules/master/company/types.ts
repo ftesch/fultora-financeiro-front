@@ -4,7 +4,7 @@ export interface Created {
 }
 
 export interface Updated {
-  created_at: string
+  updated_at: string
   name: string
 }
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui'
 
 const props = defineProps<{
   modelValue: any
@@ -24,16 +25,17 @@ function onChange(value: boolean) {
 </script>
 
 <template>
+  <div :class="['gap-2', horizontal ? 'flex items-center gap-x-4' : 'flex flex-col space-y-1.5']">
+    <Label v-if="label" :class="horizontal ? 'min-w-[140px] text-right' : ''" :right="horizontal">
+      {{ label }}
+    </Label>
+    <!-- 
   <label
     class="flex gap-2 cursor-pointer"
     :class="horizontal ? 'items-center' : 'flex-col items-start'"
-  >
-    <!-- Label -->
-    <span v-if="label" class="text-sm font-medium text-foreground">
-      {{ label }}
-    </span>
+  > -->
 
     <!-- Switch -->
     <Switch :model-value="isChecked" @update:modelValue="onChange" />
-  </label>
+  </div>
 </template>

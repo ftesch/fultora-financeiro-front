@@ -3,7 +3,7 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import CompanyForm from '../components/CompanyForm.vue'
 import { useCompanyStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, GroupIcon, InfoIcon } from 'lucide-vue-next'
+import { ArrowLeft, FileText, GroupIcon, InfoIcon, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoForm from '../components/InfoForm.vue'
@@ -30,6 +30,7 @@ const activeTab = ref('basic')
   <PageContainer :title="`Alterar ${item?.name}`" :loading="loading">
     <template #actions>
       <Button to="/master/company" variant="secondary" :icon="ArrowLeft" label="Voltar" />
+      <Button type="button" @click="submit" :loading="loading" :icon="Save" />
     </template>
 
     <PageTabs v-model="activeTab">

@@ -49,7 +49,9 @@ provide('page-tabs', {
         @click="activeTab = tab.name"
         :class="[
           'w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
-          activeTab === tab.name ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary',
+          activeTab === tab.name
+            ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-l-green-500'
+            : 'hover:bg-secondary',
         ]"
       >
         <component v-if="tab.icon" :is="tab.icon" class="h-4 w-4" />
