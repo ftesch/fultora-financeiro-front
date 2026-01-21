@@ -1,5 +1,10 @@
 <template>
   <div class="min-h-screen bg-background text-foreground">
+    <img
+      :src="logo"
+      alt="Fultora IA"
+      class="pointer-events-none fixed bottom-6 right-6 w-48 opacity-[0.06] grayscale select-none transition-opacity dark:opacity-[0.08] animate-fade-in"
+    />
     <!-- Navbar -->
     <header class="w-full">
       <AppNavbar @toggle-sidebar="toggleSidebar" :sidebar="{ open: isSidebarOpen }" />
@@ -53,6 +58,7 @@
 <script setup lang="ts">
 import AppNavbar from '@/components/layout/AppNavbar.vue'
 import SidebarItem from '@/components/layout/components/SidebarItem.vue'
+import logo from '@/assets/images/FultoraIALogo.svg'
 
 import { Home, Building2, Users, Truck, Tags, Banknote } from 'lucide-vue-next'
 

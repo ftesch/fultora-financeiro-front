@@ -4,6 +4,7 @@ import { AppSelect, Button, Input } from '@/components/ui'
 import { useFinancialCategoryStore } from '../store'
 import { storeToRefs } from 'pinia'
 import AppLookup from '@/components/common/AppLookup.vue'
+import { Save } from 'lucide-vue-next'
 
 const { loading, item } = storeToRefs(useFinancialCategoryStore())
 const { resetItem, fechOnlyData } = useFinancialCategoryStore()
@@ -66,6 +67,7 @@ const form = computed(() => {
       ]"
     />
 
-    <Button type="submit" :loading="loading"> Salvar </Button>
+    <hr />
+    <Button type="submit" :loading="loading" label="Salvar" :icon="Save" />
   </form>
 </template>

@@ -56,7 +56,7 @@ const submit = async () => {
       <!-- Form -->
       <form class="space-y-4" @submit.prevent="submit">
         <AppFormField label="E-mail" required for="email" :error="errors.email">
-          <Input id="email" v-model="form.email" type="email" placeholder="seu@email.com" />
+          <Input id="email" v-model="form.email" type="email" />
         </AppFormField>
 
         <AppFormField label="Senha" required for="password" :error="errors.password">

@@ -1,10 +1,13 @@
 <template>
   <div class="min-h-screen bg-background text-foreground flex flex-col">
+    <img
+      :src="logo"
+      alt="Fultora IA"
+      class="pointer-events-none fixed bottom-6 right-6 w-48 opacity-[0.20] grayscale select-none transition-opacity dark:opacity-[0.30] animate-fade-in"
+    />
 
     <!-- Navbar -->
-    <header
-      class="flex items-center justify-between border-b border-border px-6 py-4 bg-card h-14"
-    >
+    <header class="flex items-center justify-between border-b border-border px-6 py-4 bg-card h-14">
       <!-- Logo / Nome -->
       <div class="flex items-center gap-2 font-semibold">
         <span class="text-lg">Fultora IA</span>
@@ -30,6 +33,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import logo from '@/assets/images/FultoraIALogo.svg'
 
 const isDark = ref(false)
 

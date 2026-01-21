@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Company, Group } from './types'
+import type { Company, CompanyPlan, Group } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
@@ -9,6 +9,7 @@ import { toast } from 'vue-sonner'
 export const useCompanyStore = defineStore('company', () => {
   const loading = ref(false)
   const items = ref<Company[]>([])
+  const companyPlans = ref<CompanyPlan[]>([])
   const item = ref<Company | null>(null)
 
   async function fetchData() {
@@ -18,6 +19,25 @@ export const useCompanyStore = defineStore('company', () => {
       const { data } = await api.get<ApiResponse<Company[]>>('/api/master/company')
 
       items.value = data.data
+    } catch (error: any) {
+      handleError(error?.response)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function fetchCompanyPlansData() {
+    if (!item.value?.id) {
+      return
+    }
+    loading.value = true
+
+    try {
+      const { data } = await api.get<ApiResponse<CompanyPlan[]>>(
+        `/api/master/company_plans/${item.value?.id}`,
+      )
+
+      companyPlans.value = data.data
     } catch (error: any) {
       handleError(error?.response)
     } finally {
@@ -172,5 +192,7 @@ export const useCompanyStore = defineStore('company', () => {
     createEmptyItem,
     searchCEP,
     storeGroup,
+    fetchCompanyPlansData,
+    companyPlans,
   }
 })

@@ -36,7 +36,14 @@ const columns = [
       <Button :icon="CirclePlus" variant="secondary" to="/master/company/create" label="Novo" />
     </template>
 
-    <Table :columns="columns" :data="items" has-actions density="compact" variant="elevated">
+    <Table
+      :columns="columns"
+      :data="items"
+      has-actions
+      density="compact"
+      variant="elevated"
+      :searchable="true"
+    >
       <template #cell:type_entity="{ row }">
         <Badge variant="secondary">{{ getTypeEntityLabel(row.type_entity) }}</Badge>
       </template>

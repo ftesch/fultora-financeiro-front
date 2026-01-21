@@ -3,13 +3,13 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import CompanyForm from '../components/CompanyForm.vue'
 import { useCompanyStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, GroupIcon, InfoIcon, Save } from 'lucide-vue-next'
+import { ArrowLeft, BadgeCheck, FileText, GroupIcon, InfoIcon, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoForm from '../components/InfoForm.vue'
 import CompanyGroupForm from '../components/CompanyGroupForm.vue'
 import { TypeEntity } from '../types'
-
+import CompanyPlans from '../components/CompanyPlans.vue'
 const { updateData, findById } = useCompanyStore()
 const { loading, item } = storeToRefs(useCompanyStore())
 const route = useRoute()
@@ -49,6 +49,9 @@ const activeTab = ref('basic')
       </PageTab>
       <PageTab name="info" label="Informações" :icon="InfoIcon">
         <InfoForm />
+      </PageTab>
+      <PageTab name="license" label="Planos" :icon="BadgeCheck">
+        <CompanyPlans />
       </PageTab>
     </PageTabs>
   </PageContainer>
