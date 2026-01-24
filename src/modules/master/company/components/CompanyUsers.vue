@@ -4,33 +4,30 @@ import { Delete, Plus } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useCompanyStore } from '../store'
 import { ref } from 'vue'
-import AppInputNumber from '@/components/common/AppInputNumber.vue'
 import AppSwitch from '@/components/common/AppSwitch.vue'
+import AppLookup from '@/components/common/AppLookup.vue'
+import { formatDateTimeBR } from '@/utils/helpers'
 
-const { companyPlans, companyPlan } = storeToRefs(useCompanyStore())
-const { fetchCompanyPlansData, storePlan } = useCompanyStore()
+const { companyUsers, companyUser } = storeToRefs(useCompanyStore())
+const { storeUser, fetchUsers } = useCompanyStore()
 const openForm = ref(false)
 
 const columns = [
+  {
+    key: 'user',
+    label: 'User',
+  },
   {
     key: 'module',
     label: 'Module',
   },
   {
-    key: 'plan_id',
-    label: 'Plano',
+    key: 'role',
+    label: 'Função',
   },
   {
-    key: 'quantity',
-    label: 'Quantidade',
-  },
-  {
-    key: 'users_limit',
-    label: 'Limite de Usuários',
-  },
-  {
-    key: 'companies_limit',
-    label: 'Limite de Empresas',
+    key: 'created',
+    label: 'Criado em',
   },
 ]
 </script>
@@ -38,22 +35,28 @@ const columns = [
 <template>
   <div class="space-y-4 gap-3 bg-secondary/40 p-2 rounded-xl">
     <div class="text-right">
-      <Button label="Novo Plano" :icon="Plus" @click="openForm = true" />
+      <Button label="Novo Usuário" :icon="Plus" @click="openForm = true" />
     </div>
 
-    <div v-if="companyPlans">
+    <div v-if="companyUser">
       <Table
         :columns="columns"
-        :data="companyPlans"
+        :data="companyUsers"
         has-actions
         density="compact"
         variant="elevated"
       >
+        <template #cell:user="{ row }">
+          {{ row.user.name }}
+        </template>
         <template #cell:module="{ row }">
           <Badge>{{ row.module.label }}</Badge>
         </template>
-        <template #cell:plan_id="{ row }">
-          <Badge>{{ row.plan_id }}</Badge>
+        <template #cell:role="{ row }">
+          <Badge>{{ row.role }}</Badge>
+        </template>
+        <template #cell:created="{ row }">
+          {{ formatDateTimeBR(row.created.created_at) }}
         </template>
         <template #actions="{ row }">
           <Button variant="destructive" :icon="Delete" />
@@ -63,9 +66,9 @@ const columns = [
 
     <Dialog
       :open="openForm"
-      title="Novo Plano"
-      description="Incluir novo plano"
-      @confirm="storePlan"
+      title="Novo Usuário"
+      description="Incluir novo usuário"
+      @confirm="storeUser"
       @cancel="openForm = false"
       confirmText="Salvar"
     >
@@ -73,7 +76,7 @@ const columns = [
         <form class="p-4">
           <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
             <AppSelect
-              v-model="companyPlan.module"
+              v-model="companyUser.module"
               :horizontal="true"
               label="Modulo"
               :options="[
@@ -81,27 +84,34 @@ const columns = [
                 { label: 'Central Financeiro', value: 'central' },
               ]"
             />
-            <AppSelect
-              v-model="companyPlan.plan_id"
-              :horizontal="true"
-              label="Plano"
-              :options="[
-                { label: 'Standard', value: 'standard' },
-                { label: 'Premium', value: 'premium' },
+
+            <AppLookup
+              v-model="companyUser.user_id"
+              v-model:object="companyUser.user"
+              label="Usuário"
+              horizontal
+              placeholder="Selecione um usuário"
+              :fetch="fetchUsers"
+              :columns="[
+                { key: 'name', label: 'Nome' },
+                { key: 'email', label: 'Email' },
               ]"
             />
 
-            <AppInputNumber
-              label="Quantidade"
+            <AppSelect
+              v-model="companyUser.role"
               :horizontal="true"
-              v-model="companyPlan.quantity"
-              :decimals="0"
+              label="Modulo"
+              :options="[
+                { label: 'Usuário', value: 'user' },
+                { label: 'Administrador', value: 'admin' },
+              ]"
             />
 
             <AppSwitch
               label="Ativo"
               :horizontal="true"
-              v-model="companyPlan.active"
+              v-model="companyUser.active"
               :true-value="1"
               :false-value="0"
             />

@@ -71,15 +71,28 @@ export function getTypeEntityLabel(value?: TypeEntity | string | null): string {
 export interface CompanyPlan {
   id?: string
   plan_id: string
-  ative: boolean
+  active: number
   quantity: number
   created?: Created
-  module: Module
-  users_limit: number
-  companies_limit: number
+  module: null | Module
+}
+
+export interface CompanyUser {
+  id?: string
+  active: number
+  created?: Created
+  module: null | Module
+  user: null | User
+  user_id: string
+  role: string
 }
 
 export interface Module {
+  value: string
+  label: string
+}
+
+export interface User {
   value: string
   label: string
 }

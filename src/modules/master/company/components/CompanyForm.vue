@@ -33,16 +33,15 @@ const form = computed(() => {
     class="space-y-4 gap-3 bg-secondary/40 p-4 rounded-xl"
     @submit.prevent="$emit('submit', form)"
   >
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <MasketInput
-        v-model="form.id_fiscal"
-        label="ID Fiscal"
-        placeholder="ID Fiscal"
-        :disabled="loading || isEdit"
-        mask="cpf-cnpj"
-        :horizontal="true"
-      />
-
+    <MasketInput
+      v-model="form.id_fiscal"
+      label="ID Fiscal"
+      placeholder="ID Fiscal"
+      :disabled="loading || isEdit"
+      mask="cpf-cnpj"
+      :horizontal="true"
+    />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <AppSelect
         v-model="form.type_person"
         label="Tipo da Pessoa"

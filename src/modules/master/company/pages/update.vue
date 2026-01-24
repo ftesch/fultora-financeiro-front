@@ -3,14 +3,23 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import CompanyForm from '../components/CompanyForm.vue'
 import { useCompanyStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, BadgeCheck, FileText, GroupIcon, InfoIcon, Save } from 'lucide-vue-next'
+import {
+  ArrowLeft,
+  BadgeCheck,
+  FileText,
+  GroupIcon,
+  InfoIcon,
+  Save,
+  UserCheck,
+} from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoForm from '../components/InfoForm.vue'
 import CompanyGroupForm from '../components/CompanyGroupForm.vue'
 import { TypeEntity } from '../types'
 import CompanyPlans from '../components/CompanyPlans.vue'
-const { updateData, findById } = useCompanyStore()
+import CompanyUsers from '../components/CompanyUsers.vue'
+const { updateData, findById, fetchCompanyPlansData, fetchCompanyUserData } = useCompanyStore()
 const { loading, item } = storeToRefs(useCompanyStore())
 const route = useRoute()
 
@@ -21,6 +30,8 @@ async function submit() {
 onMounted(async () => {
   const id = route.params.id as string
   await findById(id)
+  await fetchCompanyPlansData()
+  await fetchCompanyUserData()
 })
 
 const activeTab = ref('basic')
@@ -52,6 +63,9 @@ const activeTab = ref('basic')
       </PageTab>
       <PageTab name="license" label="Planos" :icon="BadgeCheck">
         <CompanyPlans />
+      </PageTab>
+      <PageTab name="users" label="Usuários" :icon="UserCheck">
+        <CompanyUsers />
       </PageTab>
     </PageTabs>
   </PageContainer>
