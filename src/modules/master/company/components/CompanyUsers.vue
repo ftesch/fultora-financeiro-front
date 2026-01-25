@@ -9,7 +9,7 @@ import AppLookup from '@/components/common/AppLookup.vue'
 import { formatDateTimeBR } from '@/utils/helpers'
 
 const { companyUsers, companyUser } = storeToRefs(useCompanyStore())
-const { storeUser, fetchUsers } = useCompanyStore()
+const { storeUser, fetchUsers, deleteCompanyUser } = useCompanyStore()
 const openForm = ref(false)
 
 const columns = [
@@ -30,6 +30,11 @@ const columns = [
     label: 'Criado em',
   },
 ]
+
+const handleStoreUser = async () => {
+  await storeUser()
+  openForm.value = false
+}
 </script>
 
 <template>
@@ -59,7 +64,7 @@ const columns = [
           {{ formatDateTimeBR(row.created.created_at) }}
         </template>
         <template #actions="{ row }">
-          <Button variant="destructive" :icon="Delete" />
+          <Button variant="destructive" :icon="Delete" @click="deleteCompanyUser(row.id)" />
         </template>
       </Table>
     </div>
@@ -68,7 +73,7 @@ const columns = [
       :open="openForm"
       title="Novo Usuário"
       description="Incluir novo usuário"
-      @confirm="storeUser"
+      @confirm="handleStoreUser"
       @cancel="openForm = false"
       confirmText="Salvar"
     >

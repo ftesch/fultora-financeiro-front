@@ -75,6 +75,8 @@ export interface CompanyPlan {
   quantity: number
   created?: Created
   module: null | Module
+  users_limit: number
+  companies_limit: number
 }
 
 export interface CompanyUser {

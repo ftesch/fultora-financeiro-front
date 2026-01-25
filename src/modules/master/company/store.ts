@@ -153,6 +153,24 @@ export const useCompanyStore = defineStore('company', () => {
     companyPlans.value = data
   }
 
+  async function deleteCompanyPlan(id: string) {
+    const data = await request<CompanyPlan[]>({
+      method: 'delete',
+      url: `/api/master/company_plans/${item.value?.id}/${id}`,
+      loading,
+    })
+    companyPlans.value = data
+  }
+
+  async function deleteCompanyUser(id: string) {
+    const data = await request<CompanyUser[]>({
+      method: 'delete',
+      url: `/api/master/company_users/${item.value?.id}/${id}`,
+      loading,
+    })
+    companyUsers.value = data
+  }
+
   async function storeUser() {
     const data = await request<CompanyUser[]>({
       method: 'post',
@@ -185,5 +203,7 @@ export const useCompanyStore = defineStore('company', () => {
     storePlan,
     storeUser,
     fetchUsers,
+    deleteCompanyPlan,
+    deleteCompanyUser,
   }
 })

@@ -8,7 +8,7 @@ import AppInputNumber from '@/components/common/AppInputNumber.vue'
 import AppSwitch from '@/components/common/AppSwitch.vue'
 
 const { companyPlans, companyPlan } = storeToRefs(useCompanyStore())
-const { fetchCompanyPlansData, storePlan } = useCompanyStore()
+const { storePlan, deleteCompanyPlan } = useCompanyStore()
 const openForm = ref(false)
 
 const columns = [
@@ -28,11 +28,11 @@ const columns = [
     key: 'users_limit',
     label: 'Limite de Usuários',
   },
-  {
-    key: 'companies_limit',
-    label: 'Limite de Empresas',
-  },
 ]
+
+const handDeletePlan = async (id: string) => {
+  await deleteCompanyPlan(id)
+}
 </script>
 
 <template>
@@ -56,7 +56,7 @@ const columns = [
           <Badge>{{ row.plan_id }}</Badge>
         </template>
         <template #actions="{ row }">
-          <Button variant="destructive" :icon="Delete" />
+          <Button variant="destructive" :icon="Delete" @click="handDeletePlan(row.id)" />
         </template>
       </Table>
     </div>

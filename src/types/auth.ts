@@ -13,6 +13,7 @@ export interface User {
   name: string
   email: string
   modules: Module[]
+  company_modules?: Module[]
 }
 
 export interface LoginCredentials {

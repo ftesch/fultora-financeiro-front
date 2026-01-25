@@ -56,7 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       const { setModules } = useModulesStore()
-      setModules(user.value.modules)
+      const modules = [...(data.data.user.modules ?? []), ...(data.data.user.company_modules ?? [])]
+      setModules([...new Set(modules)])
 
       router.push('/app')
     } catch (error: any) {
@@ -100,7 +101,8 @@ export const useAuthStore = defineStore('auth', () => {
       licensor.value = data.data.licensor
 
       const { setModules } = useModulesStore()
-      setModules(user.value.modules)
+      const modules = [...(data.data.user.modules ?? []), ...(data.data.user.company_modules ?? [])]
+      setModules([...new Set(modules)])
     } catch {
       user.value = null
       licensor.value = null
@@ -127,7 +129,9 @@ export const useAuthStore = defineStore('auth', () => {
       licensor.value = data.data.licensor
 
       const { setModules } = useModulesStore()
-      setModules(user.value.modules)
+
+      const modules = [...(data.data.user.modules ?? []), ...(data.data.user.company_modules ?? [])]
+      setModules([...new Set(modules)])
     } catch {
       // token inválido / expirado
       user.value = null

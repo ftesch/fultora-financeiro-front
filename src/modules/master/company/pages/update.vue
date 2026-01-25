@@ -30,11 +30,18 @@ async function submit() {
 onMounted(async () => {
   const id = route.params.id as string
   await findById(id)
-  await fetchCompanyPlansData()
-  await fetchCompanyUserData()
 })
 
 const activeTab = ref('basic')
+
+const onChangTab = async () => {
+  if (activeTab.value == 'license') {
+    await fetchCompanyPlansData()
+  }
+  if (activeTab.value == 'users') {
+    await fetchCompanyUserData()
+  }
+}
 </script>
 
 <template>
@@ -44,7 +51,7 @@ const activeTab = ref('basic')
       <Button type="button" @click="submit" :loading="loading" :icon="Save" />
     </template>
 
-    <PageTabs v-model="activeTab">
+    <PageTabs v-model="activeTab" @update:model-value="onChangTab">
       <PageTab name="basic" label="Básico" :icon="FileText">
         <CompanyForm @submit="submit" mode="edit" />
       </PageTab>

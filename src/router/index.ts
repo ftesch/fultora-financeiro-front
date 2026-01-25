@@ -9,6 +9,7 @@ import Login from '@/pages/auth/Login.vue'
 import Marketplace from '@/pages/marketplace/Index.vue'
 import App from '@/pages/app/Index.vue'
 import Master from '@/pages/master/Index.vue'
+import Financeiro from '@/pages/financeiro/Index.vue'
 
 // Layout
 import AppLayout from '@/components/layout/AppLayout.vue'
@@ -23,6 +24,7 @@ import { FinancialCategoryRoutes } from '@/modules/master/financial_category/rou
 import ResetPassword from '@/pages/auth/ResetPassword.vue'
 import ForgotPassord from '@/pages/auth/ForgotPassord.vue'
 import { salesPaymentMethodRoutes } from '@/modules/master/sales_payment_method/routes'
+import FinanceiroLayout from '@/components/layout/FinanceiroLayout.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -118,6 +120,27 @@ const routes: RouteRecordRaw[] = [
       ...companyRoutes,
       ...FinancialCategoryRoutes,
       ...salesPaymentMethodRoutes,
+    ],
+  },
+  {
+    path: '/financeiro',
+    component: FinanceiroLayout,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        redirect: '/financeiro/home',
+      },
+      {
+        path: 'home',
+        name: 'financeiro.home',
+        component: Financeiro,
+        meta: {
+          title: 'Financeiro',
+        },
+      },
     ],
   },
   // fallback
