@@ -25,6 +25,8 @@ import ResetPassword from '@/pages/auth/ResetPassword.vue'
 import ForgotPassord from '@/pages/auth/ForgotPassord.vue'
 import { salesPaymentMethodRoutes } from '@/modules/master/sales_payment_method/routes'
 import FinanceiroLayout from '@/components/layout/FinanceiroLayout.vue'
+import { documentsRoutes } from '@/modules/financeiro/documents/routes'
+import { paymentConditionRoutes } from '@/modules/master/payment_condition/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -120,6 +122,7 @@ const routes: RouteRecordRaw[] = [
       ...companyRoutes,
       ...FinancialCategoryRoutes,
       ...salesPaymentMethodRoutes,
+      ...paymentConditionRoutes,
     ],
   },
   {
@@ -141,6 +144,7 @@ const routes: RouteRecordRaw[] = [
           title: 'Financeiro',
         },
       },
+      ...documentsRoutes,
     ],
   },
   // fallback

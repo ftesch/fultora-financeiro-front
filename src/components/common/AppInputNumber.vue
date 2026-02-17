@@ -44,7 +44,7 @@ watch(
   (value) => {
     if (isFocused.value) return
 
-    if (value === null || value === undefined || Number.isNaN(value)) {
+    if (value === null || value === undefined || Number.isNaN(value) || value === 0) {
       innerValue.value = ''
       return
     }
@@ -60,7 +60,8 @@ watch(
 function onFocus() {
   isFocused.value = true
 
-  if (props.modelValue === null || props.modelValue === undefined) {
+  // Se o valor for null OU zero, começa vazio
+  if (props.modelValue === null || props.modelValue === undefined || props.modelValue === 0) {
     innerValue.value = ''
     return
   }

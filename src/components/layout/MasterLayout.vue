@@ -42,6 +42,11 @@
                 label="Metodos de Pagamento"
                 :icon="Banknote"
               />
+              <SidebarItem
+                to="/master/payment_condition"
+                label="Condições de Pagamento"
+                :icon="TrendingUpDown"
+              />
             </nav>
           </div>
         </aside>
@@ -60,7 +65,7 @@ import AppNavbar from '@/components/layout/AppNavbar.vue'
 import SidebarItem from '@/components/layout/components/SidebarItem.vue'
 import logo from '@/assets/images/FultoraIALogo.svg'
 
-import { Home, Building2, Users, Truck, Tags, Banknote } from 'lucide-vue-next'
+import { Home, Building2, Users, Truck, Tags, Banknote, TrendingUpDown } from 'lucide-vue-next'
 
 import { useSidebar } from '@/composables/useSidebar'
 const { isSidebarOpen, toggleSidebar } = useSidebar()

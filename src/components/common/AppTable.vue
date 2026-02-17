@@ -9,6 +9,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
+import { CheckSquare, Square, MinusSquare } from 'lucide-vue-next'
+
 import { ref, computed, type PropType, watch } from 'vue'
 import AppInput from './AppInput.vue'
 
@@ -19,6 +21,10 @@ export interface Column<T = any> {
   label: string
   key: keyof T
   align?: ColumnAlign
+
+  width?: string // ex: '120px', '1fr', '40px'
+  minWidth?: string // ex: '80px'
+  maxWidth?: string // ex: '200px'
 }
 
 export type SortDirection = 'asc' | 'desc' | null
@@ -96,6 +102,16 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+
+  beforeSelect: {
+    type: Function as PropType<(row: any) => boolean>,
+    default: undefined,
+  },
+
+  rowKey: {
+    type: String,
+    default: 'id',
+  },
 })
 
 const search = ref('')
@@ -130,6 +146,14 @@ const variantClassMap: Record<TableVariant, string> = {
   flat: '',
   bordered: 'border border-border rounded-lg',
   elevated: 'border border-border rounded-lg shadow-sm',
+}
+
+function columnStyle(col: Column) {
+  return {
+    width: col.width,
+    minWidth: col.minWidth,
+    maxWidth: col.maxWidth,
+  }
 }
 
 watch(
@@ -180,19 +204,54 @@ const toggleSort = (key: string) => {
   emit('update:sort', sort.value)
 }
 
-const toggleRow = (row: any) => {
+const toggleRow = async (row: any) => {
   if (!props.selectable) return
 
-  const index = selectedRows.value.indexOf(row)
+  if (props.beforeSelect) {
+    const canSelect = await props.beforeSelect(row)
+    if (canSelect === false) return
+  }
+
+  const key = row[props.rowKey]
+  const index = selectedRows.value.indexOf(key)
 
   if (index >= 0) {
     selectedRows.value.splice(index, 1)
   } else {
     if (!props.multiple) selectedRows.value = []
-    selectedRows.value.push(row)
+    selectedRows.value.push(key)
   }
 
-  emit('update:selected', selectedRows.value)
+  emit(
+    'update:selected',
+    props.data.filter((d) => selectedRows.value.includes(d[props.rowKey])),
+  )
+}
+
+const toggleAllRow = async () => {
+  if (!props.selectable) return
+
+  if (allSelected.value) {
+    selectedRows.value = []
+  } else {
+    const allowedRows = []
+
+    for (const row of filteredData.value) {
+      if (props.beforeSelect) {
+        const canSelect = await props.beforeSelect(row)
+        if (!canSelect) continue
+      }
+
+      allowedRows.push(row[props.rowKey])
+    }
+
+    selectedRows.value = allowedRows
+  }
+
+  emit(
+    'update:selected',
+    props.data.filter((d) => selectedRows.value.includes(d[props.rowKey])),
+  )
 }
 
 const sortedData = computed(() => {
@@ -206,6 +265,32 @@ const sortedData = computed(() => {
     if (a[key] < b[key]) return -dir
     return 0
   })
+})
+
+const isRowSelected = (row: any) => {
+  return selectedRows.value.includes(row[props.rowKey])
+}
+
+const handleSelect = async (row: any) => {
+  if (!props.selectable) return
+
+  if (props.beforeSelect) {
+    const canSelect = await props.beforeSelect(row)
+    if (!canSelect) return
+  }
+
+  toggleRow(row)
+}
+
+const selectedKeys = computed(() => selectedRows.value)
+
+const allSelected = computed(() => {
+  if (!filteredData.value.length) return false
+  return filteredData.value.every((row) => selectedKeys.value.includes(row[props.rowKey]))
+})
+
+const someSelected = computed(() => {
+  return selectedKeys.value.length > 0 && !allSelected.value
 })
 </script>
 
@@ -224,13 +309,22 @@ const sortedData = computed(() => {
       <TableHeader class="bg-muted/40">
         <TableRow>
           <TableHead v-if="selectable" class="w-10 text-center">
-            <input type="checkbox" />
+            <button
+              type="button"
+              class="flex items-center justify-center w-5 h-5"
+              @click.stop="toggleAllRow"
+            >
+              <CheckSquare v-if="allSelected" class="w-4 h-4 text-primary" />
+              <MinusSquare v-else-if="someSelected" class="w-4 h-4 text-primary" />
+              <Square v-else class="w-4 h-4 text-muted-foreground" />
+            </button>
           </TableHead>
           <TableHead
             v-for="col in columns"
             :key="col.key as string"
             @click="sortable && toggleSort(col.key as string)"
             class="cursor-pointer select-none"
+            :style="columnStyle(col)"
           >
             <div class="flex items-center gap-2">
               {{ col.label }}
@@ -272,15 +366,29 @@ const sortedData = computed(() => {
         <TableRow
           v-for="(row, i) in sortedData"
           :key="i"
-          @click="toggleRow(row)"
-          :class="[selectable && 'cursor-pointer', selectedRows.includes(row) && 'bg-muted/40']"
+          :class="[
+            selectable && 'cursor-pointer',
+            selectedRows.includes(row[rowKey]) && 'bg-muted/40',
+          ]"
         >
+          <TableCell v-if="selectable" class="w-10 text-center">
+            <button
+              type="button"
+              class="flex items-center justify-center w-5 h-5"
+              @click.stop="handleSelect(row)"
+            >
+              <CheckSquare v-if="isRowSelected(row)" class="w-4 h-4 text-primary" />
+              <Square v-else class="w-4 h-4 text-muted-foreground" />
+            </button>
+          </TableCell>
+
           <TableCell
             v-for="col in columns"
             :key="col.key as string"
             :class="[densityClass[density], alignClassMap[col.align ?? 'left']]"
+            :style="columnStyle(col)"
           >
-            <slot :name="`cell:${String(col.key)}`" :row="row" :value="row[col.key]">
+            <slot :name="`cell:${String(col.key)}`" :row="row" :value="row[col.key]" :index="i">
               {{ row[col.key] }}
             </slot>
           </TableCell>

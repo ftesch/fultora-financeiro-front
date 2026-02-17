@@ -44,11 +44,13 @@ watch(
 )
 
 const idResolver = props.getId ?? ((item: any) => item.id)
-const labelResolver = props.getLabel ?? ((item: any) => item.name)
+const labelResolver = computed<(item: any) => string>(() => {
+  return props.getLabel ?? ((item: any) => item?.name ?? '')
+})
 
 const displayValue = computed(() => {
   if (!selectedObject.value) return ''
-  return labelResolver(selectedObject.value)
+  return labelResolver.value(selectedObject.value)
 })
 
 async function openDialog() {

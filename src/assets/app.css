@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -58,21 +58,25 @@
   --primary: oklch(0.56 0.22 235);
   --primary-foreground: oklch(0.98 0.01 230);
 
-  --secondary: oklch(0.93 0.03 230);
+  --secondary: oklch(0.91 0.03 230);
+
   --secondary-foreground: oklch(0.25 0.05 235);
 
   --accent: oklch(0.9 0.04 230);
   --accent-foreground: oklch(0.25 0.05 235);
 
   /* States */
-  --muted: oklch(0.95 0.01 230);
+  --muted: oklch(0.94 0.015 230);
   --muted-foreground: oklch(0.45 0.04 235);
 
   --destructive: oklch(0.58 0.24 27);
 
   /* Borders / Inputs */
   --border: oklch(0.88 0.02 230);
-  --input: oklch(0.92 0.02 230);
+  /* --input: oklch(0.97 0.01 230); */
+  --input: oklch(0.945 0.012 230);
+  --input-disabled: oklch(0.965 0.008 230);
+
   --ring: oklch(0.62 0.23 235);
 
   /* Charts */
@@ -141,6 +145,7 @@
   --sidebar-accent-foreground: oklch(0.94 0.01 230);
   --sidebar-border: oklch(1 0 0 / 14%);
   --sidebar-ring: oklch(0.62 0.23 235);
+  --input-disabled: oklch(0.26 0.03 240);
 }
 
 @layer base {
