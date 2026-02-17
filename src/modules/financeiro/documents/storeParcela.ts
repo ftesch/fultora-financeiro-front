@@ -15,14 +15,13 @@ import type { ApiResponse } from '@/types/common'
 import { toast } from 'vue-sonner'
 import router from '@/router'
 
-const normalizeDate = (date: any): string | null => {
+const normalizeDate = (date: unknown): string | null => {
   if (date === null || date === undefined) return null
-  if (typeof date === 'string') return date.split('T')[0]
-  if (date instanceof Date) return date.toISOString().split('T')[0]
+  if (typeof date === 'string') return date.split('T')[0] ?? null
+  if (typeof date === 'number') return normalizeDate(new Date(date))
+  if (date instanceof Date) return date.toISOString().split('T')[0] ?? null
 
-  const dateObj = new Date(date)
-  if (isNaN(dateObj.getTime())) return null
-  return dateObj.toISOString().split('T')[0]
+  return null
 }
 
 export const useDocumentStore = defineStore('documents', () => {
@@ -67,11 +66,13 @@ export const useDocumentStore = defineStore('documents', () => {
   const activePart = ref<string>('search')
 
   async function fetchCondition() {
-    return await api.get<ApiResponse<any[]>>(`/api/util/financeiro/payment_condition/search`)
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/financeiro/payment_condition/search`)
+    return data.data
   }
 
   async function fetchCategory() {
-    return await api.get<ApiResponse<any[]>>(`/api/util/financial_category/analytics`)
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/financial_category/analytics`)
+    return data.data
   }
 
   const totalSelectedValue = computed(() => {
@@ -91,8 +92,8 @@ export const useDocumentStore = defineStore('documents', () => {
       return true
     }
 
-    for (let i = 0; i < movimento.value.documents.length; i++) {
-      if (normalizeDate(movimento.value.documents[i].data_emissao) !== first) return false
+    for (const doc of movimento.value.documents) {
+      if (normalizeDate(doc.data_emissao) !== first) return false
     }
     return true
   }
@@ -156,7 +157,7 @@ export const useDocumentStore = defineStore('documents', () => {
   }
 
   function setParcelas() {
-    if (!movimento.value.payment_condition?.condition) return
+    if (!movimento.value.payment_condition?.condition || !movimento.value.data_entrada) return
 
     movimento.value.parcelas = []
 
@@ -169,15 +170,16 @@ export const useDocumentStore = defineStore('documents', () => {
     if (!dias.length) return
 
     const valorParcela = Number((totalSelectedValue.value / dias.length).toFixed(2))
+    const entrada = new Date(movimento.value.data_entrada)
 
     dias.forEach((dia, index) => {
-      const vencimento = new Date(movimento.value.data_entrada)
+      const vencimento = new Date(entrada)
       vencimento.setDate(vencimento.getDate() + dia)
 
       movimento.value.parcelas.push({
         fatura: `Parcela-${index + 1}/${dias.length}`,
         boleto: '',
-        data_vencimento: vencimento.toISOString().split('T')[0],
+        data_vencimento: vencimento.toISOString().split('T')[0] ?? '',
         valor_parcela: valorParcela,
       })
     })
@@ -195,7 +197,9 @@ export const useDocumentStore = defineStore('documents', () => {
 
       movimento.value = createEmptyDocument()
       router.push('/financeiro/documents')
-    } catch (error: any) {}
+    } catch {
+      // erro já tratado pelo request helper
+    }
   }
 
   return {

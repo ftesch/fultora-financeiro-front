@@ -18,6 +18,7 @@ function handleBoleto(
   index: number,
 ) {
   const parcela = movimento.value.parcelas[index]
+  if (!parcela) return
 
   if (data.dueDate !== parcela.data_vencimento) {
     toast.error('Data de Vencimento Incorreta')

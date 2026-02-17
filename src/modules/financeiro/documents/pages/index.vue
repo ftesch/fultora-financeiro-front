@@ -2,11 +2,9 @@
 import { storeToRefs } from 'pinia'
 import { useDocumentStore } from '../storeParcela'
 import { AppUploadXMLDocument } from '@/components/common/XmlUpload'
-import { Button, Table } from '@/components/ui'
-import { FileInput, Hand, RefreshCcw } from 'lucide-vue-next'
-import { formatCurrency, formatDateBR } from '@/utils/helpers'
+import { Button } from '@/components/ui'
+import { FileInput } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import FilterDocuments from '../components/filterDocuments.vue'
 import SimpleDocumentForm from '../components/simpleDocumentForm.vue'
 
 const onUploaded = async () => {
@@ -16,8 +14,7 @@ const onError = () => {
   toast.error('Houve falha no upload do XML')
 }
 
-const { loading, pendingDocuments, selectedDocuments, documentColumns } =
-  storeToRefs(useDocumentStore())
+const { loading } = storeToRefs(useDocumentStore())
 const { getPendingDocuments } = useDocumentStore()
 </script>
 
