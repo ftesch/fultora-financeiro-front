@@ -56,15 +56,17 @@ export const useSimpleDocumentStore = defineStore('siompleDocuments', () => {
   }
 
   async function fechCompanyData() {
-    return await api.get<ApiResponse<any[]>>(`/api/util/company/partner`)
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/company/partner`)
+    return data.data
   }
 
   async function fechCompanyGroupData() {
-    return await api.get<ApiResponse<any[]>>(`/api/util/company/group`)
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/company/group`)
+    return data.data
   }
 
   async function storeSimpleDocument() {
-    const data = await request<SimpleDocument>({
+    await request<SimpleDocument>({
       method: 'post',
       url: '/api/financeiro/documents/simple_document',
       payload: simpleDocument.value,

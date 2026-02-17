@@ -13,8 +13,7 @@ import { Save } from 'lucide-vue-next'
 import AppFileInput from '@/components/common/AppFileInput.vue'
 
 const { loading, simpleDocument } = storeToRefs(useSimpleDocumentStore())
-const { resetItem, fetchCondition, fechCompanyData, fechCompanyGroupData } =
-  useSimpleDocumentStore()
+const { resetItem, fechCompanyData, fechCompanyGroupData } = useSimpleDocumentStore()
 
 const props = defineProps<{
   mode?: 'create' | 'edit'
