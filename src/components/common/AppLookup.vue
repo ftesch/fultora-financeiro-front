@@ -4,36 +4,40 @@ import { Button } from '@/components/ui'
 import AppInput from '@/components/common/AppInput.vue'
 import AppDialog from '@/components/common/AppDialog.vue'
 import { CheckCircle, Search } from 'lucide-vue-next'
+import type { ApiResponse } from '@/types/common'
 
 type Column = {
   key: string
   label: string
 }
 
+type LookupItem = Record<string, unknown>
+type LookupFetchResult = LookupItem[] | ApiResponse<LookupItem[]> | { data: ApiResponse<LookupItem[]> }
+
 const props = defineProps<{
   modelValue: string | number | null
-  object?: any | null
+  object?: LookupItem | null
   label?: string
   horizontal?: boolean
   placeholder?: string
   disabled?: boolean
 
-  fetch: () => Promise<any[]>
+  fetch: () => Promise<LookupFetchResult>
   columns: Column[]
 
-  getId?: (item: any) => string | number
-  getLabel?: (item: any) => string
+  getId?: (item: LookupItem) => string | number
+  getLabel?: (item: LookupItem) => string
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number | null): void
-  (e: 'update:object', value: any | null): void
+  (e: 'update:object', value: LookupItem | null): void
 }>()
 
 const open = ref(false)
 const loading = ref(false)
-const items = ref<any[]>([])
-const selectedObject = ref<any | null>(props.object ?? null)
+const items = ref<LookupItem[]>([])
+const selectedObject = ref<LookupItem | null>(props.object ?? null)
 
 watch(
   () => props.object,
@@ -43,9 +47,9 @@ watch(
   { immediate: true },
 )
 
-const idResolver = props.getId ?? ((item: any) => item.id)
-const labelResolver = computed<(item: any) => string>(() => {
-  return props.getLabel ?? ((item: any) => item?.name ?? '')
+const idResolver = props.getId ?? ((item: LookupItem) => String(item.id ?? ''))
+const labelResolver = computed<(item: LookupItem) => string>(() => {
+  return props.getLabel ?? ((item: LookupItem) => String(item?.name ?? ''))
 })
 
 const displayValue = computed(() => {
@@ -53,20 +57,27 @@ const displayValue = computed(() => {
   return labelResolver.value(selectedObject.value)
 })
 
+function resolveItems(result: LookupFetchResult): LookupItem[] {
+  if (Array.isArray(result)) return result
+  if (Array.isArray(result.data)) return result.data
+
+  const nested = result.data?.data
+  return Array.isArray(nested) ? nested : []
+}
+
 async function openDialog() {
   open.value = true
   loading.value = true
 
   try {
-    const { data } = await props.fetch()
-
-    items.value = data.data
+    const result = await props.fetch()
+    items.value = resolveItems(result)
   } finally {
     loading.value = false
   }
 }
 
-function selectItem(item: any) {
+function selectItem(item: LookupItem) {
   const id = idResolver(item)
 
   selectedObject.value = item
