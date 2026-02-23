@@ -31,7 +31,8 @@
             <nav>
               <SidebarItem to="/financeiro/home" label="Home" :icon="Home" />
               <SidebarItem to="/financeiro/documents" label="Documentos" :icon="File" />
-              <SidebarItem to="/financeiro/cash" label="Caixa" :icon="Coins" />
+              <SidebarItem to="/financeiro/pos_sale" label="PDV" :icon="Coins" />
+              <SidebarItem to="/financeiro/cash" label="Caixa" :icon="Banknote" />
               <SidebarItem to="/finaceirio/reports" label="Reports" :icon="ClipboardCheckIcon" />
             </nav>
           </div>
@@ -51,7 +52,7 @@ import AppNavbar from '@/components/layout/AppNavbar.vue'
 import SidebarItem from '@/components/layout/components/SidebarItem.vue'
 import logo from '@/assets/images/FultoraIALogo.svg'
 
-import { Home, File, Coins, ClipboardCheckIcon } from 'lucide-vue-next'
+import { Home, File, Coins, ClipboardCheckIcon, Banknote } from 'lucide-vue-next'
 
 import { useSidebar } from '@/composables/useSidebar'
 const { isSidebarOpen, toggleSidebar } = useSidebar()

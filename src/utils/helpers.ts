@@ -61,6 +61,14 @@ export function formatDateTimeBR(value: Date | string | number | null | undefine
 export function formatDateBR(value: Date | string | number | null | undefined): string {
   if (!value) return ''
 
+  if (typeof value === 'string') {
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+    if (dateOnlyMatch) {
+      const [, year, month, day] = dateOnlyMatch
+      return `${day}/${month}/${year}`
+    }
+  }
+
   const date = value instanceof Date ? value : new Date(value)
 
   if (Number.isNaN(date.getTime())) return ''

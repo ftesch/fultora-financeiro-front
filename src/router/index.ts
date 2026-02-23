@@ -27,6 +27,8 @@ import { salesPaymentMethodRoutes } from '@/modules/master/sales_payment_method/
 import FinanceiroLayout from '@/components/layout/FinanceiroLayout.vue'
 import { documentsRoutes } from '@/modules/financeiro/documents/routes'
 import { paymentConditionRoutes } from '@/modules/master/payment_condition/routes'
+import { posSaleRoutes } from '@/modules/financeiro/possale/routes'
+import { cashRoutes } from '@/modules/financeiro/cash/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -145,6 +147,8 @@ const routes: RouteRecordRaw[] = [
         },
       },
       ...documentsRoutes,
+      ...posSaleRoutes,
+      ...cashRoutes,
     ],
   },
   // fallback
