@@ -7,7 +7,7 @@ import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import router from '@/router'
 
-const { storeData, resetItem } = useCashStore()
+const { storeData, resetMovimento } = useCashStore()
 const { loading } = storeToRefs(useCashStore())
 
 async function submit() {
@@ -16,7 +16,7 @@ async function submit() {
 }
 
 onMounted(() => {
-  resetItem()
+  resetMovimento()
 })
 
 const activeTab = ref('basic')
