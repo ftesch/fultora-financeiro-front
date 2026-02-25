@@ -101,8 +101,11 @@ const form = computed(() => {
       :loading="loading"
       @click="resetMovimento"
       :icon="Eraser"
+      v-if="mode == 'create'"
       class="bg-amber-300"
     />
-    <Button type="submit" :loading="loading" :icon="Save" class="ml-2"> Salvar </Button>
+    <Button v-if="mode == 'create'" type="submit" :loading="loading" :icon="Save" class="ml-2">
+      Salvar
+    </Button>
   </form>
 </template>

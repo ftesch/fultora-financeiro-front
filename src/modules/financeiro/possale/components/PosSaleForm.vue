@@ -98,7 +98,10 @@ function toggleDensity() {
 
         <!-- Valor -->
         <div class="w-40">
-          <AppInputNumber v-model="form.transactions[index].valor" />
+          <AppInputNumber
+            v-model="form.transactions[index].valor"
+            :disabled="!form.transactions[index]?.can_update"
+          />
         </div>
       </div>
     </div>

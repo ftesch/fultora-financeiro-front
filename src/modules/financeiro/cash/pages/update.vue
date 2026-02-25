@@ -3,13 +3,13 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import CashForm from '../components/CashForm.vue'
 import { useCashStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, Save } from 'lucide-vue-next'
+import { ArrowLeft, FileText, MoveIcon, Save } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 
 const { updateData, findById } = useCashStore()
-const { loading, item } = storeToRefs(useCashStore())
+const { loading, movimento } = storeToRefs(useCashStore())
 const route = useRoute()
 
 async function submit() {
@@ -29,12 +29,11 @@ const activeTab = ref('basic')
   <PageContainer title="Alterar" :loading="loading">
     <template #actions>
       <Button to="/financeiro/cash" variant="secondary" :icon="ArrowLeft" label="Voltar" />
-      <Button :icon="Save" @click="submit" />
     </template>
 
     <PageTabs v-model="activeTab">
       <PageTab name="basic" label="Básico" :icon="FileText">
-        <CashForm :model-value="item" @submit="submit" mode="edit" />
+        <CashForm :model-value="movimento" @submit="submit" mode="edit" />
       </PageTab>
     </PageTabs>
   </PageContainer>

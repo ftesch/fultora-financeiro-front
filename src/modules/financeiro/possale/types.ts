@@ -12,6 +12,7 @@ export interface Transaction {
   id?: string
   sales_payment_method_id: string
   payment_method: PaymentMethod
+  can_update?: boolean
   valor: number
 }
 

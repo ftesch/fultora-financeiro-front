@@ -49,7 +49,12 @@ const columns = [
       </template>
 
       <template #actions="{ row }">
-        <Button variant="secondary" :icon="Pencil" :to="`/financeiro/pos_sale/${row.id}/edit`" />
+        <Button
+          size="sm"
+          variant="secondary"
+          :icon="Pencil"
+          :to="`/financeiro/pos_sale/${row.id}/edit`"
+        />
       </template>
     </Table>
   </PageContainer>
