@@ -10,6 +10,7 @@ import Marketplace from '@/pages/marketplace/Index.vue'
 import App from '@/pages/app/Index.vue'
 import Master from '@/pages/master/Index.vue'
 import Financeiro from '@/pages/financeiro/Index.vue'
+import Central from '@/pages/central/Index.vue'
 
 // Layout
 import AppLayout from '@/components/layout/AppLayout.vue'
@@ -29,6 +30,8 @@ import { documentsRoutes } from '@/modules/financeiro/documents/routes'
 import { paymentConditionRoutes } from '@/modules/master/payment_condition/routes'
 import { posSaleRoutes } from '@/modules/financeiro/possale/routes'
 import { cashRoutes } from '@/modules/financeiro/cash/routes'
+import CentralLayout from '@/components/layout/CentralLayout.vue'
+import { orderRoutes } from '@/modules/central/order/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -149,6 +152,28 @@ const routes: RouteRecordRaw[] = [
       ...documentsRoutes,
       ...posSaleRoutes,
       ...cashRoutes,
+    ],
+  },
+  {
+    path: '/central',
+    component: CentralLayout,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        redirect: '/central/home',
+      },
+      {
+        path: 'home',
+        name: 'central.home',
+        component: Central,
+        meta: {
+          title: 'Central Financeira',
+        },
+      },
+      ...orderRoutes,
     ],
   },
   // fallback

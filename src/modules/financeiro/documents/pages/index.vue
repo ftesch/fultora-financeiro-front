@@ -7,15 +7,11 @@ import { FileInput } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import SimpleDocumentForm from '../components/simpleDocumentForm.vue'
 
-const onUploaded = async () => {
-  await getPendingDocuments()
-}
 const onError = () => {
   toast.error('Houve falha no upload do XML')
 }
 
 const { loading } = storeToRefs(useDocumentStore())
-const { getPendingDocuments } = useDocumentStore()
 </script>
 
 <template>
