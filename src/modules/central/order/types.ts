@@ -11,7 +11,7 @@ export interface PaymentOrder {
   financial_category?: FinancialCategory
   company_accound_id: string
   account?: Account
-  documents: FiscalDocument
+  documents?: FiscalDocument
   data_emissao: string
   data_entrada: string
   data_vencimento: string
@@ -20,10 +20,12 @@ export interface PaymentOrder {
   valor_juros: number
   valor_desconto: number
   valor_liquido: number
-  valor_pagameto: number
-  boleto: string | null
+  valor_pagamento: number
+  boleto?: string | null
+  path_comprovante?: string | null
   created?: Created
   updated?: Updated
+  comprovante: File | null
 }
 
 export interface FiscalDocument {

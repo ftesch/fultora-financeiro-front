@@ -9,19 +9,25 @@ import AppLookup from '@/components/common/AppLookup.vue'
 import { getSituacaoOPColor, getSituacaoOPLabel } from '../types'
 import AppContent from '@/components/common/AppContent.vue'
 import { formatDateBR } from '@/utils/helpers'
-import { Copy } from 'lucide-vue-next'
+import { BanknoteArrowDownIcon, Copy } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import AppFileInput from '@/components/common/AppFileInput.vue'
+import BaixaForm from './BaixaForm.vue'
 
 const { loading, item } = storeToRefs(useOrderStore())
-const { resetItem, fechCompanyGroupData, fechCompanyData, fetchCategory, fetchAccount } =
-  useOrderStore()
+const {
+  resetItem,
+  settlement,
+  fechCompanyGroupData,
+  fechCompanyData,
+  fetchCategory,
+  fetchAccount,
+} = useOrderStore()
 
 const props = defineProps<{
   mode?: 'create' | 'edit'
 }>()
 const isEdit = computed(() => props.mode === 'edit')
-
-defineEmits(['submit'])
 
 /**
  * Garante que sempre exista um objeto
@@ -33,15 +39,6 @@ const form = computed(() => {
   }
   return item.value!
 })
-
-const showAccountLabel = (account: any) => {
-  if (!account.banco) return ''
-
-  if (account.banco == 0) {
-    return 'Conta Caixa'
-  }
-  return `${account.banco} - ${account.agencia} - ${account.conta}`
-}
 
 const handleCopy = async () => {
   const boleto = item.value?.boleto?.trim()
@@ -117,21 +114,6 @@ const handleCopy = async () => {
           ]"
         />
 
-        <AppLookup
-          v-model="form.company_accound_id"
-          v-model:object="form.account"
-          label="Conta"
-          horizontal
-          :get-label="(u) => showAccountLabel(u)"
-          placeholder="Selecione a Conta"
-          :fetch="fetchAccount"
-          :columns="[
-            { key: 'banco', label: 'Banco' },
-            { key: 'agencia', label: 'Agencia' },
-            { key: 'conta', label: 'Conta' },
-          ]"
-        />
-
         <Input
           label="Boleto"
           :horizontal="true"
@@ -190,79 +172,69 @@ const handleCopy = async () => {
       </section>
 
       <section class="space-y-4">
-        <div class="space-y-3 rounded-lg border border-border bg-background/70 p-3">
-          <h3 class="text-sm font-semibold">Datas</h3>
+        <div
+          class="space-y-3 rounded-lg border border-border bg-background/70 p-4 grid grid-cols-3 gap-2"
+        >
           <AppMaskedInput
             v-model="form.data_emissao"
             mask="date"
             label="Emissão"
-            :horizontal="true"
+            :disabled="true"
           />
           <AppMaskedInput
             v-model="form.data_entrada"
             mask="date"
             label="Entrada"
-            :horizontal="true"
+            :disabled="true"
           />
           <AppMaskedInput
             v-model="form.data_vencimento"
             mask="date"
             label="Vencimento"
-            :horizontal="true"
-          />
-          <AppMaskedInput
-            v-model="form.data_pagamento"
-            mask="date"
-            label="Pagamento"
-            :horizontal="true"
+            :disabled="true"
           />
         </div>
 
-        <div class="space-y-3 rounded-lg border border-border bg-background/70 p-3">
-          <h3 class="text-sm font-semibold">Valores</h3>
+        <div
+          class="space-y-3 rounded-lg border border-border bg-background/70 p-4 grid grid-cols-4 gap-2"
+        >
           <AppInputNumber
-            :horizontal="true"
             label="Valor Nominal"
             v-model="form.valor_nominal"
             :loading="loading"
             :min="0"
             step="0.01"
+            :disabled="true"
           />
 
           <AppInputNumber
-            :horizontal="true"
             label="Valor Juros"
             v-model="form.valor_juros"
             :loading="loading"
             :min="0"
             step="0.01"
+            :disabled="true"
           />
 
           <AppInputNumber
-            :horizontal="true"
             label="Valor Desconto"
             v-model="form.valor_desconto"
             :loading="loading"
             :min="0"
             step="0.01"
+            :disabled="true"
           />
           <AppInputNumber
-            :horizontal="true"
             label="Valor Liquido"
             v-model="form.valor_liquido"
             :loading="loading"
             :min="0"
             step="0.01"
-          />
-          <AppInputNumber
-            :horizontal="true"
-            label="Valor Pagamento"
-            v-model="form.valor_pagameto"
-            :loading="loading"
-            :min="0"
-            step="0.01"
+            :disabled="true"
           />
         </div>
+
+        <BaixaForm />
       </section>
     </div>
   </form>

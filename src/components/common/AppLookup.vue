@@ -12,7 +12,10 @@ type Column = {
 }
 
 type LookupItem = Record<string, unknown>
-type LookupFetchResult = LookupItem[] | ApiResponse<LookupItem[]> | { data: ApiResponse<LookupItem[]> }
+type LookupFetchResult =
+  | LookupItem[]
+  | ApiResponse<LookupItem[]>
+  | { data: ApiResponse<LookupItem[]> }
 
 const props = defineProps<{
   modelValue: string | number | null
@@ -132,7 +135,13 @@ function handleClose() {
           </td>
 
           <td class="px-1 py-1 text-right">
-            <Button size="sm" @click="selectItem(item)" :icon="CheckCircle" />
+            <Button
+              size="sm"
+              @click="selectItem(item)"
+              :icon="CheckCircle"
+              class="size-7"
+              variant="outline"
+            />
           </td>
         </tr>
       </tbody>

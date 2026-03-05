@@ -3,7 +3,14 @@ import { Button, PageContainer, PageTab, PageTabs } from '@/components/ui'
 import OrderForm from '../components/OrderForm.vue'
 import { useOrderStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { ArrowLeft, FileText, InfoIcon, Save, TimerIcon } from 'lucide-vue-next'
+import {
+  ArrowLeft,
+  BanknoteArrowDownIcon,
+  FileText,
+  InfoIcon,
+  Save,
+  TimerIcon,
+} from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoForm from '../components/InfoForm.vue'
