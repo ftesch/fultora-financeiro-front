@@ -39,11 +39,11 @@ const open = computed({
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'small':
-      return 'max-w-md'
+      return 'sm:max-w-md'
     case 'large':
-      return 'max-w-[90vw]'
+      return 'sm:max-w-[90vw]'
     default:
-      return 'max-w-2xl'
+      return 'sm:max-w-2xl'
   }
 })
 

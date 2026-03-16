@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Company, CompanyPlan, CompanyUser, Group } from './types'
+import type { Account, Company, CompanyPlan, CompanyUser, Group } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { handleError } from '@/utils/helpers'
@@ -21,6 +21,7 @@ export const useCompanyStore = defineStore('company', () => {
   const item = ref<Company | null>(null)
   const companyPlan = ref<CompanyPlan>(createEmptyPlan())
   const companyUser = ref<CompanyUser>(createEmptyUser())
+  const account = ref<Account>(createEmptyAccount())
 
   async function fetchData() {
     const data = await request<Company[]>({
@@ -182,7 +183,23 @@ export const useCompanyStore = defineStore('company', () => {
     companyUsers.value = data
   }
 
+  function createEmptyAccount() {
+    return {
+      type: 'Conta Bancária',
+      banco: '',
+      agencia: '',
+      conta: '',
+      digito_conta: '',
+      active: true,
+    } as Account
+  }
+
+  function resetAccount() {
+    account.value = createEmptyAccount()
+  }
+
   return {
+    resetAccount,
     resetItem,
     resetGroup,
     loading,
@@ -205,5 +222,6 @@ export const useCompanyStore = defineStore('company', () => {
     fetchUsers,
     deleteCompanyPlan,
     deleteCompanyUser,
+    account,
   }
 })

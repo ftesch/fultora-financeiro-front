@@ -29,6 +29,8 @@ const columns = [
   {
     key: 'financial_category',
     label: 'Categoria',
+    width: '180px',
+    maxWidth: '180px',
   },
   {
     key: 'data_vencimento',
@@ -41,6 +43,7 @@ const columns = [
   {
     key: 'valor_nominal',
     label: 'Valor',
+    align: 'right',
   },
 ]
 </script>
@@ -57,7 +60,7 @@ const columns = [
       :columns="columns"
       :data="items"
       has-actions
-      density="compact"
+      density="dense"
       variant="elevated"
       class="mt-4"
     >
@@ -73,7 +76,12 @@ const columns = [
         {{ row.supplier.name }}
       </template>
       <template #cell:financial_category="{ row }">
-        {{ row.financial_category.account }}-{{ row.financial_category.name }}
+        <div
+          class="max-w-[180px] truncate"
+          :title="`${row.financial_category.account}-${row.financial_category.name}`"
+        >
+          {{ row.financial_category.account }}-{{ row.financial_category.name }}
+        </div>
       </template>
       <template #cell:data_vencimento="{ row }">
         {{ formatDateBR(row.data_vencimento) }}

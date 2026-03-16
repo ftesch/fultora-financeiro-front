@@ -9,6 +9,7 @@ import {
   FileText,
   GroupIcon,
   InfoIcon,
+  Landmark,
   Save,
   UserCheck,
 } from 'lucide-vue-next'
@@ -19,6 +20,7 @@ import CompanyGroupForm from '../components/CompanyGroupForm.vue'
 import { TypeEntity } from '../types'
 import CompanyPlans from '../components/CompanyPlans.vue'
 import CompanyUsers from '../components/CompanyUsers.vue'
+import CompanyAccountForm from '../components/CompanyAccountForm.vue'
 const { updateData, findById, fetchCompanyPlansData, fetchCompanyUserData } = useCompanyStore()
 const { loading, item } = storeToRefs(useCompanyStore())
 const route = useRoute()
@@ -73,6 +75,9 @@ const onChangTab = async () => {
       </PageTab>
       <PageTab name="users" label="Usuários" :icon="UserCheck">
         <CompanyUsers />
+      </PageTab>
+      <PageTab name="account" label="Contas" :icon="Landmark">
+        <CompanyAccountForm />
       </PageTab>
     </PageTabs>
   </PageContainer>
