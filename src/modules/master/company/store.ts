@@ -3,8 +3,6 @@ import { ref } from 'vue'
 import type { Account, Company, CompanyPlan, CompanyUser, Group } from './types'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
-import { handleError } from '@/utils/helpers'
-import { toast } from 'vue-sonner'
 import { request } from '@/utils/requestHelper'
 import {
   createEmptyCompany,
@@ -183,6 +181,33 @@ export const useCompanyStore = defineStore('company', () => {
     companyUsers.value = data
   }
 
+  async function storeAccount() {
+    if (!item.value?.id) {
+      return
+    }
+
+    let url: string
+    let method: 'post' | 'put'
+
+    if (account.value.id) {
+      url = `/api/master/company_account/${item.value.id}/${account.value.id}`
+      method = 'put'
+    } else {
+      url = `/api/master/company_account/${item.value.id}`
+      method = 'post'
+    }
+
+    const data = await request<Account[]>({
+      method,
+      url,
+      payload: account.value,
+      loading,
+    })
+    console.log(data)
+
+    item.value.accounts = data
+  }
+
   function createEmptyAccount() {
     return {
       type: 'Conta Bancária',
@@ -223,5 +248,6 @@ export const useCompanyStore = defineStore('company', () => {
     deleteCompanyPlan,
     deleteCompanyUser,
     account,
+    storeAccount,
   }
 })

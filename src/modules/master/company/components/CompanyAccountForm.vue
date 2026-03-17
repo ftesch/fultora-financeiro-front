@@ -7,7 +7,7 @@ import { AppSelect, Badge, Button, Dialog, Input, Switch, Table } from '@/compon
 import { CirclePlus, Pencil } from 'lucide-vue-next'
 
 const { item, account } = storeToRefs(useCompanyStore())
-const { resetAccount } = useCompanyStore()
+const { resetAccount, storeAccount } = useCompanyStore()
 
 const openForm = ref(false)
 const editingAccountId = ref<string | null>(null)
@@ -42,14 +42,16 @@ const columns = [
 
 const accounts = computed(() => item.value?.accounts ?? [])
 
-function openCreateModal() {
+const openCreateModal = () => {
   editingAccountId.value = null
-  account.value = resetAccount()
+  resetAccount()
   openForm.value = true
 }
 
-function openEditModal(account: Account) {
-  editingAccountId.value = account.id
+function openEditModal(data: Account) {
+  editingAccountId.value = data.id
+
+  account.value = data
   openForm.value = true
 }
 
@@ -67,8 +69,8 @@ function updateOpenState(value: boolean) {
   openForm.value = value
 }
 
-function saveAccount() {
-  console.log(account.value)
+const saveAccount = async () => {
+  await storeAccount()
   closeModal()
 }
 </script>
@@ -113,7 +115,13 @@ function saveAccount() {
       </template>
 
       <template #actions="{ row }">
-        <Button variant="secondary" :icon="Pencil" @click="openEditModal(row)" />
+        <Button
+          variant="secondary"
+          :icon="Pencil"
+          @click="openEditModal(row)"
+          size="sm"
+          class="size-8"
+        />
       </template>
     </Table>
 
@@ -128,15 +136,15 @@ function saveAccount() {
       @update:open="updateOpenState"
     >
       <div class="bg-secondary/40 rounded-xl p-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4">
           <AppSelect
             v-model="account.type"
-            label="Tipo"
+            label="Tipo da Conta"
             :horizontal="true"
             :options="accountTypeOptions"
           />
 
-          <Input v-model="account.banco" label="Banco" :horizontal="true" placeholder="Ex: 237" />
+          <Input v-model="account.banco" label="Banco" :horizontal="true" />
 
           <Input
             v-model="account.agencia"
@@ -145,7 +153,7 @@ function saveAccount() {
             placeholder="Agencia"
           />
 
-          <div class="grid grid-cols-1 md:grid-cols-[1fr_120px] gap-4 md:col-span-2">
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_250px] gap-4 md:col-span-2">
             <Input
               v-model="account.conta"
               label="Conta"
