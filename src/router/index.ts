@@ -32,6 +32,7 @@ import { posSaleRoutes } from '@/modules/financeiro/possale/routes'
 import { cashRoutes } from '@/modules/financeiro/cash/routes'
 import CentralLayout from '@/components/layout/CentralLayout.vue'
 import { orderRoutes } from '@/modules/central/order/routes'
+import { agendaRoutes } from '@/modules/central/agenda/routes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -174,6 +175,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       ...orderRoutes,
+      ...agendaRoutes,
     ],
   },
   // fallback
