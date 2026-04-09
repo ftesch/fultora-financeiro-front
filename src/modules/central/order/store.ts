@@ -23,7 +23,7 @@ export const useOrderStore = defineStore('order', () => {
       const params = getParams(criteria.value)
       const url = params.toString() ? `${APIRoute}?${params.toString()}` : APIRoute
 
-      const { data } = await api.get<ApiResponse<PaymentOrder[]>>(url)
+      const { data } = await api.post<ApiResponse<PaymentOrder[]>>(url, criteria.value)
 
       items.value = data.data
     } catch (error: any) {
@@ -179,13 +179,15 @@ export const useOrderStore = defineStore('order', () => {
     return data.data
   }
 
-  async function fechCompanyData() {
-    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/company/partner`)
+  async function fechCompanyData(query?: string) {
+    const suffix = query ? `?query=${encodeURIComponent(query)}` : ''
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/company/partner${suffix}`)
     return data.data
   }
 
-  async function fetchCategory() {
-    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/financial_category/analytics`)
+  async function fetchCategory(query?: string) {
+    const suffix = query ? `?query=${encodeURIComponent(query)}` : ''
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/financial_category/analytics${suffix}`)
     return data.data
   }
 
@@ -205,7 +207,7 @@ export const useOrderStore = defineStore('order', () => {
       end_date: '',
       per_page: 50,
       page: 1,
-    }
+    } as Criteria
   }
 
   function resetCriteria() {

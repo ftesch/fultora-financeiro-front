@@ -3,9 +3,11 @@ import AppLookup from '@/components/common/AppLookup.vue'
 import { useOrderStore } from '../store'
 import AppMaskedInput from '@/components/common/AppMaskedInput.vue'
 import { storeToRefs } from 'pinia'
-import { Button } from '@/components/ui'
+import { AppCalendar, Button } from '@/components/ui'
 import { ArrowBigLeft, ArrowBigRight, Eraser, Search } from 'lucide-vue-next'
 import AppSelect from '@/components/common/AppSelect.vue'
+import { ref } from 'vue'
+import { createIdResolver } from 'vite'
 
 const { fechCompanyGroupData, fechCompanyData, fetchCategory, fetchData, resetCriteria } =
   useOrderStore()
@@ -15,21 +17,35 @@ const handlePage = (fator: number) => {
   criteria.value.page = criteria.value.page + fator
   fetchData()
 }
+
 </script>
 
 <template>
   <form @submit.prevent="fetchData">
     <div class="grid grid-cols-2 gap-4">
-      <AppMaskedInput
-        v-model="criteria.start_date"
-        mask="date"
-        label="Data Inicio"
+
+      <AppCalendar
+        v-model="criteria.data_entrada"
+        mode="range"
+        label="Data de Entrada"
         :horizontal="true"
       />
-      <AppMaskedInput
-        v-model="criteria.end_date"
-        mask="date"
-        label="Data Inicio"
+      <AppCalendar
+        v-model="criteria.data_lancamento"
+        mode="range"
+        label="Data de Lançamento"
+        :horizontal="true"
+      />
+      <AppCalendar
+        v-model="criteria.data_vencimento"
+        mode="range"
+        label="Data de Vencimento"
+        :horizontal="true"
+      />
+      <AppCalendar
+        v-model="criteria.data_pagamento"
+        mode="range"
+        label="Data de Pagamento"
         :horizontal="true"
       />
       <AppLookup

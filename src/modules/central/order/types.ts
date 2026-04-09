@@ -92,7 +92,10 @@ export interface Criteria {
   financial_category_id: string
   financial_category?: FinancialCategory
   start_date: string
-  end_date: string
+  data_entrada?: { start?: string, end?: string }
+  data_vencimento?: { start?: string, end?: string }
+  data_lancamento?: { start?: string, end?: string }
+  data_pagamento?: { start?: string, end?: string }
   per_page: number
   page: number
 }

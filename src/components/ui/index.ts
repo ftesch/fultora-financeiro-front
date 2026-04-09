@@ -52,6 +52,7 @@ export { default as Dialog } from '@/components/common/AppDialog.vue'
 export { default as MasketInput } from '@/components/common/AppMaskedInput.vue'
 export { default as PageContainer } from '@/components/common/AppPageContainer.vue'
 export { default as AppSelect } from '@/components/common/AppSelect.vue'
+export { default as AppCalendar } from '@/components/common/AppCalendar/AppCalendar.vue'
 export { default as PageTabs } from '@/components/common/AppPageTabs.vue'
 export { default as PageTab } from '@/components/common/AppPageTab.vue'
 
