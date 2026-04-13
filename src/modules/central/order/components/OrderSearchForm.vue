@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import AppLookup from '@/components/common/AppLookup.vue'
 import { useOrderStore } from '../store'
-import AppMaskedInput from '@/components/common/AppMaskedInput.vue'
 import { storeToRefs } from 'pinia'
 import { AppCalendar, Button } from '@/components/ui'
 import { ArrowBigLeft, ArrowBigRight, Eraser, Search } from 'lucide-vue-next'
 import AppSelect from '@/components/common/AppSelect.vue'
-import { ref } from 'vue'
-import { createIdResolver } from 'vite'
 
 const { fechCompanyGroupData, fechCompanyData, fetchCategory, fetchData, resetCriteria } =
   useOrderStore()

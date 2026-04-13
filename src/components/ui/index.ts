@@ -96,3 +96,4 @@ export {
 } from './alert-dialog'
 
 export { Toaster } from './sonner'
+export { Progress } from './progress'

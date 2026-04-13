@@ -56,7 +56,7 @@ export const useOrderStore = defineStore('order', () => {
 
     try {
       const payload = {
-        company_accound_id: item.value?.company_accound_id,
+        company_account_id: item.value?.company_account_id,
         data_pagamento: item.value?.data_pagamento,
         valor_pagamento: item.value?.valor_pagamento,
         comprovante: item.value?.comprovante,

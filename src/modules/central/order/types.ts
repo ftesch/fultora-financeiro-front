@@ -9,7 +9,7 @@ export interface PaymentOrder {
   supplier?: Supplier
   financial_category_id: string
   financial_category?: FinancialCategory
-  company_accound_id: string
+  company_account_id: string
   account?: Account
   documents?: FiscalDocument
   data_emissao: string

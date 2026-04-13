@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue'
+import { isAfter, isBefore, isSameDay, parse, parseISO, startOfDay } from 'date-fns'
 import type { Column } from './AppTable.vue'
 
 const props = defineProps({
@@ -35,10 +36,26 @@ const props = defineProps({
     type: Number,
     default: 7,
   },
+  minColumnWidth: {
+    type: [Number, String],
+    default: 220,
+  },
+  classBeforeData: {
+    type: String,
+    default: '',
+  },
+  classAfterData: {
+    type: String,
+    default: '',
+  },
+  classCurrentDate: {
+    type: String,
+    default: '',
+  },
 })
 
 const gridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${props.weekColumns}, minmax(220px, 1fr))`,
+  gridTemplateColumns: `repeat(auto-fit, minmax(min(${typeof props.minColumnWidth === 'number' ? `${props.minColumnWidth}px` : props.minColumnWidth}, 100%), 1fr))`,
 }))
 
 const resolvedColumns = computed(() => props.columns ?? props.column ?? [])
@@ -46,12 +63,59 @@ const resolvedColumns = computed(() => props.columns ?? props.column ?? [])
 function getRowKey(row: Record<string, any>, index: number) {
   return row[props.rowKey] ?? row.data ?? index
 }
+
+function parseRowDate(value: unknown) {
+  if (!value) return null
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : startOfDay(value)
+  }
+
+  if (typeof value === 'string') {
+    const normalizedValue = value.trim()
+    const supportedFormats = [
+      'yyyy-MM-dd',
+      "yyyy-MM-dd'T'HH:mm:ss",
+      "yyyy-MM-dd'T'HH:mm:ss.SSS",
+      "yyyy-MM-dd'T'HH:mm:ssXXX",
+      "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+      'dd/MM/yyyy',
+    ]
+
+    for (const format of supportedFormats) {
+      const parsedDate = format.includes("'T'")
+        ? parseISO(normalizedValue)
+        : parse(normalizedValue, format, new Date())
+
+      if (!Number.isNaN(parsedDate.getTime())) {
+        return startOfDay(parsedDate)
+      }
+    }
+  }
+
+  return null
+}
+
+function getDateClass(row: Record<string, any>) {
+  const rowDate = parseRowDate(row.data)
+
+  if (!rowDate) return ''
+
+  
+  const today = startOfDay(new Date())
+
+  if (isBefore(rowDate, today)) return props.classBeforeData
+  if (isAfter(rowDate, today)) return props.classAfterData
+  if (isSameDay(rowDate, today)) return props.classCurrentDate
+
+  return ''
+}
 </script>
 
 <template>
-  <div class="overflow-x-auto">
+  <div class="w-full">
     <div
-      class="grid min-w-max gap-4 auto-rows-fr"
+      class="grid w-full gap-4 auto-rows-fr"
       :style="gridStyle"
     >
       <div
@@ -72,6 +136,7 @@ function getRowKey(row: Record<string, any>, index: number) {
         v-for="(row, index) in data"
         v-else
         :key="getRowKey(row, index)"
+        :class="getDateClass(row)"
         class="flex h-full min-h-44 flex-col rounded-2xl border border-border bg-card p-4 shadow-sm"
       >
         <slot name="header" :row="row" :index="index" />

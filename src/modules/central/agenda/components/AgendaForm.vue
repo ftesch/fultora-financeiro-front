@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia'
 
 
 const { loading, item } = storeToRefs(useAgendaStore())
-const { resetItem } = useCompanyStore()
+//const { resetItem } = useAgendaStore()
 
 const props = defineProps<{
   mode?: 'create' | 'edit'
@@ -20,9 +20,9 @@ defineEmits(['submit'])
  * para bindar no formulário
  */
 const form = computed(() => {
-  if (!item) {
-    resetItem()
-  }
+  // if (!item) {
+  //   resetItem()
+  // }
   return item.value!
 })
 </script>
@@ -58,8 +58,5 @@ const form = computed(() => {
       :disabled="loading"
     />
 
-    <Button type="submit" :loading="store.loading">
-      Salvar
-    </Button>
   </form>
 </template>

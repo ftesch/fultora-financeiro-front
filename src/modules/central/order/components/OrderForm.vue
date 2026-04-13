@@ -9,19 +9,16 @@ import AppLookup from '@/components/common/AppLookup.vue'
 import { getSituacaoOPColor, getSituacaoOPLabel } from '../types'
 import AppContent from '@/components/common/AppContent.vue'
 import { formatDateBR } from '@/utils/helpers'
-import { BanknoteArrowDownIcon, Copy } from 'lucide-vue-next'
+import { Copy } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import AppFileInput from '@/components/common/AppFileInput.vue'
 import BaixaForm from './BaixaForm.vue'
 
 const { loading, item } = storeToRefs(useOrderStore())
 const {
   resetItem,
-  settlement,
   fechCompanyGroupData,
   fechCompanyData,
   fetchCategory,
-  fetchAccount,
 } = useOrderStore()
 
 const props = defineProps<{

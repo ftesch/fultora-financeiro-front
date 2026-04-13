@@ -31,6 +31,7 @@
             <nav>
               <SidebarItem to="/central/home" label="Home" :icon="Home" />
               <SidebarItem to="/central/order" label="Ordem" :icon="File" />
+              <SidebarItem to="/central/agenda" label="Agenda" :icon="CalendarCheck" />
             </nav>
           </div>
         </aside>
@@ -49,7 +50,7 @@ import AppNavbar from '@/components/layout/AppNavbar.vue'
 import SidebarItem from '@/components/layout/components/SidebarItem.vue'
 import logo from '@/assets/images/FultoraIALogo.svg'
 
-import { Home, File, Coins, ClipboardCheckIcon, Banknote } from 'lucide-vue-next'
+import { Home, File, Coins, ClipboardCheckIcon, Banknote, CalendarCheck } from 'lucide-vue-next'
 
 import { useSidebar } from '@/composables/useSidebar'
 const { isSidebarOpen, toggleSidebar } = useSidebar()

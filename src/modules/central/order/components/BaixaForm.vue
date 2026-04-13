@@ -43,7 +43,7 @@ const showAccountLabel = (account: any) => {
     <h3 class="text-sm font-semibold bg-background/80 p-2 rounded-2xl">Baixa</h3>
     <AppLookup
       :disabled="form.situacao_op == SituacaoOP.PAID"
-      v-model="form.company_accound_id"
+      v-model="form.company_account_id"
       v-model:object="form.account"
       label="Conta"
       horizontal
