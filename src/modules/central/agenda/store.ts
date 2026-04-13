@@ -131,7 +131,7 @@ export const useAgendaStore = defineStore('agenda', () => {
     loading.value = true
 
     try {
-      const { data, headers } = await api.get<Blob>(`${APIRoute}/${documentOfPayment.value.id}/comprovante`, {
+      const { data, headers } = await api.get<Blob>(`${APIBaixa}/${documentOfPayment.value.id}/comprovante`, {
         responseType: 'blob',
       })
 
