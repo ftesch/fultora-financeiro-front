@@ -24,6 +24,7 @@ export const useLicensorStore = defineStore('licensor', () => {
       setLicensor({
         name: licensor?.value?.name,
         id_fiscal: licensor?.value?.id_fiscal,
+        plans: [],
       })
     } catch (error: any) {
       handleError(error?.response)
@@ -50,6 +51,7 @@ export const useLicensorStore = defineStore('licensor', () => {
       setLicensor({
         name: licensor.value.name,
         id_fiscal: licensor.value.id_fiscal,
+        plans: [],
       })
     } catch (error: any) {
     } finally {

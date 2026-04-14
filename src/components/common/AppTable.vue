@@ -19,7 +19,7 @@ type TableVariant = 'flat' | 'bordered' | 'elevated'
 
 export interface Column<T = any> {
   label: string
-  key: keyof T
+  key: Extract<keyof T, string> | string
   align?: ColumnAlign
 
   width?: string // ex: '120px', '1fr', '40px'
@@ -185,7 +185,7 @@ const filteredData = computed(() => {
 
   return props.data.filter((row) =>
     props.columns.some((col) =>
-      String(row[col.key] ?? '')
+      String(row[String(col.key)] ?? '')
         .toLowerCase()
         .includes(term),
     ),
@@ -388,8 +388,13 @@ const someSelected = computed(() => {
             :class="[densityClass[density], alignClassMap[col.align ?? 'left']]"
             :style="columnStyle(col)"
           >
-            <slot :name="`cell:${String(col.key)}`" :row="row" :value="row[col.key]" :index="i">
-              {{ row[col.key] }}
+            <slot
+              :name="`cell:${String(col.key)}`"
+              :row="row"
+              :value="row[String(col.key)]"
+              :index="i"
+            >
+              {{ row[String(col.key)] }}
             </slot>
           </TableCell>
 

@@ -22,9 +22,14 @@ const handleSubmit = async () => {
 
 <template>
   <form v-if="form" class="space-y-4 gap-3 bg-secondary/40 p-4 rounded-xl">
-    <Input v-model="form.group.apelido" :horizontal="true" label="Apelido" :disabled="loading" />
     <Input
-      v-model="form.group.codigo"
+      v-model="form.group!.apelido"
+      :horizontal="true"
+      label="Apelido"
+      :disabled="loading"
+    />
+    <Input
+      v-model="form.group!.codigo"
       :horizontal="true"
       label="Código Interno"
       :disabled="loading"

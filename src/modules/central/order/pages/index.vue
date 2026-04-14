@@ -5,11 +5,12 @@ import { storeToRefs } from 'pinia'
 import { CirclePlus, Pencil } from 'lucide-vue-next'
 import OrderSearchForm from '../components/OrderSearchForm.vue'
 import { formatCurrency, formatDateBR } from '@/utils/helpers'
-import { getSituacaoOPColor, getSituacaoOPLabel } from '../types'
+import { getSituacaoOPColor, getSituacaoOPLabel, type PaymentOrder } from '../types'
+import type { Column } from '@/components/common/AppTable.vue'
 
 const { items, loading } = storeToRefs(useOrderStore())
 
-const columns = [
+const columns: Column<PaymentOrder>[] = [
   {
     key: 'op',
     label: 'OP',
@@ -43,7 +44,7 @@ const columns = [
   {
     key: 'valor_nominal',
     label: 'Valor',
-    align: 'right',
+    align: 'right' as const,
   },
 ]
 </script>

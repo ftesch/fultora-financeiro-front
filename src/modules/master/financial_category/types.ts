@@ -32,7 +32,10 @@ export const FinancialCategoryTypeLabel: Record<FinancialCategoryType, string> =
   [FinancialCategoryType.Devedora]: 'Devedora',
 }
 
-export const FinancialCategoryTypeLabelVariant: Record<FinancialCategoryType, string> = {
+export const FinancialCategoryTypeLabelVariant: Record<
+  FinancialCategoryType,
+  BadgeVariants['variant']
+> = {
   [FinancialCategoryType.Sintetica]: 'outline',
   [FinancialCategoryType.Credora]: 'secondary',
   [FinancialCategoryType.Devedora]: 'destructive',
@@ -48,8 +51,9 @@ export function getFinancialCategoryTypeLabel(
 
 export function getFinancialCategoryTypeVariant(
   value?: FinancialCategoryType | string | null,
-): string {
-  if (!value) return ''
+): BadgeVariants['variant'] {
+  if (!value) return 'default'
 
-  return FinancialCategoryTypeLabelVariant[value as FinancialCategoryType] ?? value
+  return FinancialCategoryTypeLabelVariant[value as FinancialCategoryType] ?? 'default'
 }
+import type { BadgeVariants } from '@/components/ui/badge'

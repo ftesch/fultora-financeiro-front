@@ -94,8 +94,8 @@ export const useUserStore = defineStore('user', () => {
     return {
       name: '',
       email: '',
-      created_at: '',
-      updated_at: '',
+      created_at: null,
+      updated_at: null,
     }
   }
 

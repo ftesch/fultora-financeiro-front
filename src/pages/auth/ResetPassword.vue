@@ -58,8 +58,8 @@ const submit = async () => {
 }
 
 onMounted(() => {
-  form.token = route.query.token
-  form.email = route.query.email
+  form.token = typeof route.query.token === 'string' ? route.query.token : ''
+  form.email = typeof route.query.email === 'string' ? route.query.email : ''
 })
 </script>
 

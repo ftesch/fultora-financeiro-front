@@ -23,7 +23,7 @@ const props = withDefaults(
     items: AccordionItemType[]
     type?: 'single' | 'multiple'
     collapsible?: boolean
-    modelValue?: string | string[]
+    modelValue?: string | string[] | undefined
   }>(),
   {
     type: 'single',
@@ -32,7 +32,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | string[]): void
+  (e: 'update:modelValue', value: string | string[] | undefined): void
 }>()
 
 const value = computed({

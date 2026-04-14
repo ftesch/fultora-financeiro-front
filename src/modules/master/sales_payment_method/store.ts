@@ -96,8 +96,8 @@ export const useSalesPaymentMethodStore = defineStore('salespaymentmethodstore',
       acquirer_id: '',
       payment_method: '',
       payment_term_options: '',
-      payment_term_days: '',
-      payment_tax: '',
+      payment_term_days: 0,
+      payment_tax: 0,
       active: 1,
     }
   }

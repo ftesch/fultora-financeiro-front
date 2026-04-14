@@ -49,7 +49,7 @@ const openCreateModal = () => {
 }
 
 function openEditModal(data: Account) {
-  editingAccountId.value = data.id
+  editingAccountId.value = data.id ?? null
 
   account.value = data
   openForm.value = true
@@ -118,7 +118,7 @@ const saveAccount = async () => {
         <Button
           variant="secondary"
           :icon="Pencil"
-          @click="openEditModal(row)"
+          @click="openEditModal(row as Account)"
           size="sm"
           class="size-8"
         />

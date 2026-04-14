@@ -150,7 +150,7 @@ function getDateClass(row: Record<string, any>) {
             <slot
               :name="`cell:${String(column.key)}`"
               :row="row"
-              :value="row[column.key]"
+              :value="row[String(column.key)]"
               :column="column"
               :index="index"
             >
@@ -158,7 +158,7 @@ function getDateClass(row: Record<string, any>) {
                 {{ column.label }}
               </p>
               <p class="mt-1 text-sm font-semibold text-foreground">
-                {{ row[column.key] ?? '-' }}
+                {{ row[String(column.key)] ?? '-' }}
               </p>
             </slot>
           </div>

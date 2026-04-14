@@ -11,6 +11,15 @@ import {
   createEmptyUser,
 } from './store/company.factory'
 
+type CepResponse = {
+  endereco: string
+  complemento: string
+  bairro: string
+  cidade: string
+  estado: string
+  id_ibge: number
+}
+
 export const useCompanyStore = defineStore('company', () => {
   const loading = ref(false)
   const items = ref<Company[]>([])
@@ -58,7 +67,8 @@ export const useCompanyStore = defineStore('company', () => {
   }
 
   async function fetchUsers() {
-    return await api.get<ApiResponse<any[]>>(`/api/util/users/search`)
+    const { data } = await api.get<ApiResponse<any[]>>(`/api/util/users/search`)
+    return data.data
   }
 
   async function storeData() {
@@ -97,6 +107,10 @@ export const useCompanyStore = defineStore('company', () => {
       loading,
     })
 
+    if (!item.value) {
+      item.value = createEmptyCompany()
+    }
+
     item.value.group = data
   }
 
@@ -123,15 +137,22 @@ export const useCompanyStore = defineStore('company', () => {
   }
 
   function resetGroup() {
+    if (!item.value) {
+      item.value = createEmptyCompany()
+    }
     item.value.group = createEmptyGroup()
   }
 
   async function searchCEP() {
-    const data = await request({
+    const data = await request<CepResponse>({
       method: 'get',
       url: `/api/util/cep?cep=${item?.value?.cep}`,
       loading,
     })
+
+    if (!item.value) {
+      item.value = createEmptyCompany()
+    }
 
     item.value.endereco = data.endereco
     item.value.complemento = data.complemento
@@ -215,8 +236,9 @@ export const useCompanyStore = defineStore('company', () => {
       agencia: '',
       conta: '',
       digito_conta: '',
+      principal: false,
       active: true,
-    } as Account
+    } satisfies Account
   }
 
   function resetAccount() {

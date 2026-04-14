@@ -9,13 +9,13 @@ export interface Updated {
 }
 
 export interface Account {
-  id: string
+  id?: string
   type: string
   banco: string | null
   agencia: string | null
   conta: string | null
   digito_conta: string | null
-  principal: boolean
+  principal?: boolean
   active: boolean
 }
 
@@ -74,7 +74,7 @@ export interface CompanyPlan {
   active: number
   quantity: number
   created?: Created
-  module: null | Module
+  module: null | Module | string
   users_limit: number
   companies_limit: number
 }
@@ -83,7 +83,7 @@ export interface CompanyUser {
   id?: string
   active: number
   created?: Created
-  module: null | Module
+  module: null | Module | string
   user: null | User
   user_id: string
   role: string
@@ -97,4 +97,5 @@ export interface Module {
 export interface User {
   value: string
   label: string
+  name?: string
 }

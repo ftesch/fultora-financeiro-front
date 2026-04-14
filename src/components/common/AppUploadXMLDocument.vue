@@ -25,6 +25,7 @@ function onFileChange(event: Event) {
   if (!target.files?.length) return
 
   const selectedFile = target.files[0]
+  if (!selectedFile) return
 
   if (selectedFile.type !== 'text/xml' && !selectedFile.name.endsWith('.xml')) {
     error.value = 'Apenas arquivos XML são permitidos.'

@@ -33,6 +33,8 @@ export function createEmptyPlan(): CompanyPlan {
     active: 1,
     quantity: 0,
     module: null,
+    users_limit: 0,
+    companies_limit: 0,
   }
 }
 

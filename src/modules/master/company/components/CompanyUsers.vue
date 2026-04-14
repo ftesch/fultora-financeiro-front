@@ -52,16 +52,16 @@ const handleStoreUser = async () => {
         variant="elevated"
       >
         <template #cell:user="{ row }">
-          {{ row.user.name }}
+          {{ row.user?.name ?? row.user?.label }}
         </template>
         <template #cell:module="{ row }">
-          <Badge>{{ row.module.label }}</Badge>
+          <Badge>{{ typeof row.module === 'string' ? row.module : row.module?.label }}</Badge>
         </template>
         <template #cell:role="{ row }">
           <Badge>{{ row.role }}</Badge>
         </template>
         <template #cell:created="{ row }">
-          {{ formatDateTimeBR(row.created.created_at) }}
+          {{ row.created ? formatDateTimeBR(row.created.created_at) : '' }}
         </template>
         <template #actions="{ row }">
           <Button variant="destructive" :icon="Delete" @click="deleteCompanyUser(row.id)" />

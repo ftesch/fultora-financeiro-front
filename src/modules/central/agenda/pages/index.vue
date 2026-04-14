@@ -13,7 +13,7 @@ const currentYear = new Date().getFullYear();
 const { fetchData, fechCompanyGroupData } = useAgendaStore()
 const { items, loading, criteria } = storeToRefs(useAgendaStore())
 
-const columns: Column[] = [
+const columns: Column<Agenda>[] = [
   {
     key: 'data',
     label: 'Data',
@@ -52,9 +52,12 @@ const weeks = Array.from({ length: 53 }, (_, i) => {
   };
 });
 
-const calcWork = (day: Agenda ) => {
-  return (day.valor_pago / day.valor_apagar) *100
-  
+const calcWork = (day: Agenda | Record<string, any>) => {
+  const valorApagar = Number(day.valor_apagar ?? 0)
+  const valorPago = Number(day.valor_pago ?? 0)
+
+  if (!valorApagar) return 0
+  return (valorPago / valorApagar) * 100
 }
 
 </script>

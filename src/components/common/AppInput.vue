@@ -5,7 +5,7 @@ import { Label } from '@/components/ui'
 import { Eye, EyeOff } from 'lucide-vue-next'
 
 const props = defineProps<{
-  modelValue?: string | number
+  modelValue?: string | number | null
   label?: string
   placeholder?: string
   error?: string
@@ -15,7 +15,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | number): void
+  (e: 'update:modelValue', value: string | number | null): void
 }>()
 
 const slots = useSlots()

@@ -6,6 +6,7 @@ export interface Module {
   role: string
   value: string
   route: string
+  label?: string
   icon: Component
 }
 
@@ -19,12 +20,6 @@ export interface User {
 export interface LoginCredentials {
   email: string
   password: string
-}
-
-export interface Module {
-  value: string
-  label: string
-  route: string
 }
 
 export interface Plans {

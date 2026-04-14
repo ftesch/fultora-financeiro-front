@@ -137,7 +137,7 @@ export const useOrderStore = defineStore('order', () => {
       company_id: '',
       supplier_id: '',
       financial_category_id: '',
-      company_accound_id: '',
+      company_account_id: '',
       data_emissao: '',
       data_entrada: '',
       data_vencimento: '',
@@ -204,10 +204,13 @@ export const useOrderStore = defineStore('order', () => {
       supplier_id: '',
       financial_category_id: '',
       start_date: '',
-      end_date: '',
+      data_entrada: {},
+      data_vencimento: {},
+      data_lancamento: {},
+      data_pagamento: {},
       per_page: 50,
       page: 1,
-    } as Criteria
+    }
   }
 
   function resetCriteria() {

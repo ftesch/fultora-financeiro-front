@@ -6,12 +6,14 @@ import { formatDateBR } from '@/utils/helpers'
 
 const { item } = storeToRefs(useOrderStore())
 
+const firstDocumentDate = computed(() => item.value?.documents?.[0]?.document.data_emissao)
+
 const events = computed(() => [
   {
     id: 'invoice-issued',
     title: 'Emissão das notas fiscais',
     description: 'Notas fiscais emitidas para iniciar o fluxo da Ordem de Pagamento.',
-    date: item.value?.documents?.data_emissao || item.value?.data_emissao,
+    date: firstDocumentDate.value || item.value?.data_emissao,
   },
   {
     id: 'system-entry',

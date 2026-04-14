@@ -50,7 +50,7 @@ const handDeletePlan = async (id: string) => {
         variant="elevated"
       >
         <template #cell:module="{ row }">
-          <Badge>{{ row.module.label }}</Badge>
+          <Badge>{{ typeof row.module === 'string' ? row.module : row.module?.label }}</Badge>
         </template>
         <template #cell:plan_id="{ row }">
           <Badge>{{ row.plan_id }}</Badge>

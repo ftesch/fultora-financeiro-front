@@ -1,3 +1,7 @@
+export interface PaymentOrderDocumentLink {
+  document: FiscalDocument
+}
+
 export interface PaymentOrder {
   id?: string
   op?: string
@@ -11,7 +15,7 @@ export interface PaymentOrder {
   financial_category?: FinancialCategory
   company_account_id: string
   account?: Account
-  documents?: FiscalDocument
+  documents?: PaymentOrderDocumentLink[]
   data_emissao: string
   data_entrada: string
   data_vencimento: string
@@ -63,19 +67,6 @@ export interface FinancialCategory {
   type: string
 }
 
-export interface Criteria {
-  company_id: string
-  company?: Company
-  supplier_id: string
-  supplier?: Supplier
-  financial_category_id: string
-  financial_category?: FinancialCategory
-  start_date: string
-  end_date: string
-  per_page: number
-  page: number
-}
-
 export interface Account {
   id?: string
   banco: number
@@ -92,6 +83,7 @@ export interface Criteria {
   financial_category_id: string
   financial_category?: FinancialCategory
   start_date: string
+  end_date?: string
   data_entrada?: { start?: string, end?: string }
   data_vencimento?: { start?: string, end?: string }
   data_lancamento?: { start?: string, end?: string }

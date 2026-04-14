@@ -44,7 +44,7 @@ function onFileChange(event: Event) {
   if (props.multiple) {
     emit('update:modelValue', Array.from(input.files))
   } else {
-    emit('update:modelValue', input.files[0])
+    emit('update:modelValue', input.files[0] ?? null)
   }
 }
 </script>

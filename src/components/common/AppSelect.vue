@@ -12,11 +12,11 @@ import {
 
 type Option = {
   label: string
-  value: string | number
+  value: string | number | Record<string, any> | null
 }
 
 const props = defineProps<{
-  modelValue?: string | number
+  modelValue?: string | number | Record<string, any> | null
   options: Option[]
   label?: string
   placeholder?: string
@@ -25,14 +25,15 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | number): void
+  (e: 'update:modelValue', value: string | number | Record<string, any> | null): void
 }>()
 
 const inputId = `select-${Math.random().toString(36).substring(2, 9)}`
 
 const model = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value as string | number),
+  set: (value) =>
+    emit('update:modelValue', value as string | number | Record<string, any> | null),
 })
 </script>
 
@@ -56,7 +57,7 @@ const model = computed({
         </SelectTrigger>
 
         <SelectContent>
-          <SelectItem v-for="option in options" :key="option.value" :value="option.value">
+          <SelectItem v-for="(option, index) in options" :key="index" :value="option.value">
             {{ option.label }}
           </SelectItem>
         </SelectContent>

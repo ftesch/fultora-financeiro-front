@@ -7,6 +7,10 @@ import { FileInput } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import SimpleDocumentForm from '../components/simpleDocumentForm.vue'
 
+const onUploaded = () => {
+  toast.success('XML enviado com sucesso')
+}
+
 const onError = () => {
   toast.error('Houve falha no upload do XML')
 }

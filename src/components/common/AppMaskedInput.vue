@@ -28,7 +28,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | null): void
   (
     e: 'boletoData',
     data: {
@@ -147,14 +147,14 @@ function calculateDueDate(factor: string): string | null {
     const days = factorNumber - 1000
     resetDate.setDate(resetDate.getDate() + days)
 
-    return resetDate.toISOString().split('T')[0]
+    return resetDate.toISOString().split('T')[0] ?? null
   }
 
   // Regra antiga
   const baseDate = new Date('1997-10-07T00:00:00')
   baseDate.setDate(baseDate.getDate() + factorNumber)
 
-  return baseDate.toISOString().split('T')[0]
+  return baseDate.toISOString().split('T')[0] ?? null
 }
 
 function extractBoletoData(numeric: string) {
@@ -208,12 +208,12 @@ const maskedValue = computed(() => {
 
 /* ---------------- handlers ---------------- */
 
-function onInput(value: string) {
-  const numeric = onlyNumbers(value)
+function onInput(value: string | number | null) {
+  const numeric = onlyNumbers(String(value))
 
   if (props.mask === 'date') {
     const iso = toISODate(numeric)
-    emit('update:modelValue', iso ?? '')
+    emit('update:modelValue', iso)
     return
   }
 
