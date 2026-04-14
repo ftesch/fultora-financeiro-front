@@ -151,13 +151,13 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       await getCsrfCookie()
-
       const { data } = await api.post('/api/register', payload)
 
       user.value = data.data.user
       token.value = data.data.token ?? null
 
       if (data.data.token) {
+        licensor.value = null;
         localStorage.setItem('auth_token', data.data.token)
       }
 

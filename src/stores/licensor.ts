@@ -5,6 +5,7 @@ import { handleError } from '@/utils/helpers'
 import type { ApiResponse } from '@/types/common'
 import api from '@/services/api'
 import { useAuthStore } from './auth'
+import { toast } from 'vue-sonner'
 
 export const useLicensorStore = defineStore('licensor', () => {
   const licensor = ref<Licensor>(createEmptyCompany())
@@ -41,11 +42,11 @@ export const useLicensorStore = defineStore('licensor', () => {
 
   async function fetchPrincipalCompany() {
     loading.value = false
-
+    
     try {
       const { data } = await api.get<ApiResponse<Licensor>>('/api/company/principal')
-
-      licensor.value = data.data
+      
+      licensor.value = data.data      
 
       const { setLicensor } = useAuthStore()
       setLicensor({
@@ -55,6 +56,7 @@ export const useLicensorStore = defineStore('licensor', () => {
       })
     } catch (error: any) {
     } finally {
+
       loading.value = false
     }
   }
