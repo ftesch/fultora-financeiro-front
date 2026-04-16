@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Button, Input, Switch } from '@/components/ui'
-import { useDocumentStore } from '../storeParcela'
 import { storeToRefs } from 'pinia'
-import AppSelect from '@/components/common/AppSelect.vue'
-import AppSwitch from '@/components/common/AppSwitch.vue'
 import { useSimpleDocumentStore } from '../storeSimpleDocument'
 import AppMaskedInput from '@/components/common/AppMaskedInput.vue'
 import AppInputNumber from '@/components/common/AppInputNumber.vue'
@@ -13,7 +10,7 @@ import { Save } from 'lucide-vue-next'
 import AppFileInput from '@/components/common/AppFileInput.vue'
 
 const { loading, simpleDocument } = storeToRefs(useSimpleDocumentStore())
-const { resetItem, fechCompanyData, fechCompanyGroupData } = useSimpleDocumentStore()
+const { resetItem, fechCompanyData, fechCompanyGroupData, storeSimpleDocument } = useSimpleDocumentStore()
 
 const props = defineProps<{
   mode?: 'create' | 'edit'
@@ -38,7 +35,7 @@ const form = computed(() => {
   <form
     v-if="form"
     class="space-y-4 gap-3 bg-secondary/40 p-4 rounded-xl"
-    @submit.prevent="$emit('submit', form)"
+    @submit.prevent="storeSimpleDocument"
   >
     <AppLookup
       v-model="form.company_id"
