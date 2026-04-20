@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 'vue-sonner/style.css'
 import { Toaster } from './components/ui';
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 
 
 </script>
@@ -8,6 +9,7 @@ import { Toaster } from './components/ui';
 <template>
   <router-view />
   <Toaster richColors />
+  <SpeedInsights />
 
 </template>
 
